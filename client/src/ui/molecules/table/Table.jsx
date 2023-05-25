@@ -4,7 +4,6 @@ import MuiTable from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import { EnhancedTableHead } from './components/EnhancedTableHead';
@@ -12,8 +11,6 @@ import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
 
 export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
   const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleSelectAllClick = (event) => {
     setSelected(event.target.checked ? rows.map((n) => getUniqueId(n)) : []);
@@ -26,19 +23,6 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
         : [...selected, id],
     );
   };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const onDelete = () => {
     deleteRecords(selected);
@@ -59,7 +43,6 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
           <TableBody>
             {rows
               .slice()
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const uniqueId = getUniqueId(row);
                 const isItemSelected = selected.includes(uniqueId);
@@ -96,27 +79,9 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
                   </TableRow>
                 );
               })}
-            {emptyRows > 0 && (
-              <TableRow
-                style={{
-                  height: 55.8 * emptyRows,
-                }}
-              >
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
           </TableBody>
         </MuiTable>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
     </Box>
   );
 };
