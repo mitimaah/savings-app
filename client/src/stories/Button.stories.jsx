@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Button } from '../ui';
 import { Grid, Typography } from '@mui/material';
+import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -47,6 +49,23 @@ const All = () => (
       </Grid>
       <Button variant={'contained'} color={'primary'}>
         Button
+      </Button>
+      <Button
+        variant={'contained'}
+        startIcon={<AddRoundedIcon />}
+        color={'primary'}
+      >
+        Button
+      </Button>
+      <Button
+        variant={'contained'}
+        endIcon={<NavigateNextRoundedIcon />}
+        color={'primary'}
+      >
+        Button
+      </Button>
+      <Button variant={'contained'} color={'primary'}>
+        <NavigateNextRoundedIcon />
       </Button>
       <Button variant={'contained'} color={'error'}>
         Button
