@@ -11,33 +11,31 @@ export const Error = ({ error }) => {
         flexDirection: 'column',
       }}
     >
-      {
-        error?.message?.includes('Network Error') ? 
-        (<Typography>Uruchom Server!</Typography>) : 
-        (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
+      {error?.message?.includes('Network Error') ? (
+        <Typography>Uruchom Server!</Typography>
+      ) : (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}
+        >
+          <img
+            alt=""
+            src={unknown_error}
+            style={{
+              height: '100%',
+              weight: '100%',
+              maxHeight: '248px',
+              maxWidth: '248px',
             }}
-          >
-            <img
-              alt=""
-              src={unknown_error}
-              style={{
-                height: '100%',
-                weight: '100%',
-                maxHeight: '248px',
-                maxWidth: '248px',
-              }}
-            />
-            <Typography sx={{ color: '#33333350' }}>
-              Wystąpił nieoczekiwany błąd
-            </Typography>
-          </Box>
-        )
-      }
+          />
+          <Typography sx={{ color: '#33333350' }}>
+            Wystąpił nieoczekiwany błąd
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -1,7 +1,7 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Grid } from '@mui/material';
 import { BudgetService } from 'api';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
   ActionHeader,
   Button,
@@ -16,70 +16,64 @@ import {
   Table,
 } from 'ui';
 
+const headCells = [
+  {
+    id: '1',
+    label: 'Nazwa',
+    renderCell: (row) => (
+      <CategoryCell color={row.category.color} name={row.category.name} />
+    ),
+  },
+  {
+    id: '2',
+    label: 'Planowane wydatki',
+    renderCell: (row) => <Money inCents={row.amountInCents} />,
+  },
+  {
+    id: '3',
+    label: 'Obecna kwota',
+    renderCell: (row) => <Money inCents={row.currentSpending} />,
+  },
+  {
+    id: '4',
+    label: 'Status',
+    renderCell: (row) => {
+      if (row.currentSpending === row.amountInCents) {
+        return 'Wykorzystany';
+      } else if (row.currentSpending > row.amountInCents) {
+        return 'Przekroczone';
+      } else if (row.currentSpending < row.amountInCents) {
+        return 'W normie';
+      }
+    },
+  },
+  {
+    id: '5',
+    label: 'Data utworzenia',
+    renderCell: (row) => <LocalizedDate date={row.createdAt} />,
+  },
+];
+
 export const BudgetPage = () => {
-  // const { isLoading, error, data } = useQuery('budgetData', () => {
-  //   return BudgetService.findAll();
-  // });
+  const { isLoading, error, isSuccess, data } = useQuery({
+    queryKey: ['budget'],
+    queryFn: BudgetService.findAll,
+  });
 
-  const getBudgetData = async () => {
-    const res = await BudgetService.findAll();
-    return res;
-  };
-  const { data, error, isLoading } = useQuery('budgetData', getBudgetData);
+  const queryClient = useQueryClient();
 
-  const deleteMutation = useMutation((ids) => {
-    return BudgetService.remove(ids);
+  const mutation = useMutation({
+    mutationFn: (selected) => {
+      return BudgetService.remove({ ids: selected });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['budget'] });
+    },
   });
 
   const getUniqueId = (row) => {
     return row.id;
   };
-
-  const deleteRecords = (selectedIds) => {
-    deleteMutation.mutate(selectedIds);
-    console.log('deleted row', selectedIds);
-    getBudgetData();
-  };
-
-  const headCells = [
-    {
-      id: '1',
-      label: 'Nazwa',
-      renderCell: (row) => (
-        <CategoryCell color={row.category.color} name={row.category.name} />
-      ),
-    },
-    {
-      id: '2',
-      label: 'Planowane wydatki',
-      renderCell: (row) => <Money inCents={row.amountInCents} />,
-    },
-    {
-      id: '3',
-      label: 'Obecna kwota',
-      renderCell: (row) => <Money inCents={row.currentSpending} />,
-    },
-    {
-      id: '4',
-      label: 'Status',
-      renderCell: (row) => {
-        if (row.currentSpending === row.amountInCents) {
-          return 'Wykorzystany';
-        }
-        if (row.currentSpending > row.amountInCents) {
-          return 'Przekroczone';
-        }
-        if (row.currentSpending < row.amountInCents) {
-          return 'W normie';
-        }
-      },
-    },
-    {
-      id: '5',
-      label: 'Data utworzenia',
-      renderCell: (row) => <LocalizedDate date={row.createdAt} />,
-    },
-  ];
 
   return (
     <Page title="Budżet">
@@ -100,22 +94,21 @@ export const BudgetPage = () => {
           />
         }
       >
-        {isLoading && <Loader />}
-        {error && <Error />}
-        {data ? (
-          <Grid container>
-            <Grid item xs={12}>
+        <Grid container>
+          <Grid item xs={12}>
+            {isLoading && <Loader />}
+            {error && <Error />}
+            {isSuccess && data.length === 0 && <NoContent />}
+            {isSuccess && data.length > 0 && (
               <Table
                 headCells={headCells}
                 rows={data}
                 getUniqueId={getUniqueId}
-                deleteRecords={deleteRecords}
+                deleteRecords={mutation.mutate}
               />
-            </Grid>
+            )}
           </Grid>
-        ) : (
-          <NoContent />
-        )}
+        </Grid>
       </Card>
     </Page>
   );
