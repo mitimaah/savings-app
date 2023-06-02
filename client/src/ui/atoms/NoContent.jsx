@@ -11,8 +11,16 @@ export const NoContent = () => {
         flexDirection: 'column',
       }}
     >
-      <img alt="noContent" src={no_content} />
-      <Typography>Brak danych do wyświetlenia</Typography>
+      <img alt="" width={202} height={202} src={no_content} loading="lazy" />
+      <Typography
+        textAlign={'center'}
+        mb={2}
+        sx={{
+          color: '#33333350',
+        }}
+      >
+        Brak danych do wyświetlenia
+      </Typography>
     </Box>
   );
 };

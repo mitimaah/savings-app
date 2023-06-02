@@ -14,10 +14,27 @@ export const Error = ({ error }) => {
       {error?.message?.includes('Network Error') ? (
         <Typography>Uruchom Server!</Typography>
       ) : (
-        <>
-          <img alt="error" src={unknown_error} />
-          <Typography>Wystąpił nieoczekiwany błąd</Typography>
-        </>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+          }}
+        >
+          <img
+            alt=""
+            src={unknown_error}
+            style={{
+              height: '100%',
+              weight: '100%',
+              maxHeight: '248px',
+              maxWidth: '248px',
+            }}
+          />
+          <Typography sx={{ color: '#33333350' }}>
+            Wystąpił nieoczekiwany błąd
+          </Typography>
+        </Box>
       )}
     </Box>
   );

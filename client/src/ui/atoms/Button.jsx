@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { StyledEngineProvider } from '@mui/material/styles';
 import { Button as MuiButton } from '@mui/material';
+import { StyledEngineProvider } from '@mui/material/styles';
+import PropTypes from 'prop-types';
 import './Button.css';
 
 export function Button({
@@ -27,3 +27,14 @@ export function Button({
     </StyledEngineProvider>
   );
 }
+
+Button.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+    .isRequired,
+  variant: PropTypes.string,
+  color: PropTypes.string,
+  disabled: PropTypes.bool,
+  startIcon: PropTypes.element,
+  endIcon: PropTypes.element,
+  onClick: PropTypes.func,
+};
