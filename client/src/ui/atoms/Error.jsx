@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import unknown_error from '../../assets/unknown_error.png';
+import ErrorImage from 'assets/unknown_error.png';
 
 export const Error = ({ error }) => {
   return (
@@ -23,7 +23,7 @@ export const Error = ({ error }) => {
         >
           <img
             alt=""
-            src={unknown_error}
+            src={ErrorImage}
             style={{
               height: '100%',
               weight: '100%',
