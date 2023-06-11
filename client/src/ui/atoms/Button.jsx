@@ -1,7 +1,6 @@
 import { Button as MuiButton } from '@mui/material';
 import { StyledEngineProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import './Button.css';
 
 export function Button({
   children,

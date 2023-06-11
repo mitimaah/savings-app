@@ -145,6 +145,92 @@ theme = createTheme(theme, {
         },
       },
     },
+
+    MuiButton: {
+      defaultProps: {
+        variant: 'outlined',
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: theme.shape.borderRadius,
+          textTransform: 'none',
+          height: '34px',
+        },
+        contained: {
+          boxShadow: 'none',
+          ':active': {
+            boxShadow: theme.shadows[2],
+          },
+        },
+        containedPrimary: {
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+          ':hover': {
+            backgroundColor: theme.palette.primary.dark,
+            color: theme.palette.primary.contrastText,
+            boxShadow: 'none',
+          },
+        },
+        containedError: {
+          backgroundColor: theme.palette.error.light,
+          color: theme.palette.error.dark,
+          ':hover': {
+            backgroundColor: theme.palette.error.main,
+            color: theme.palette.primary.contrastText,
+            boxShadow: 'none',
+          },
+        },
+        containedSuccess: {
+          backgroundColor: theme.palette.success.light,
+          color: theme.palette.success.dark,
+          ':hover': {
+            backgroundColor: theme.palette.success.main,
+            color: theme.palette.success.contrastText,
+            boxShadow: 'none',
+          },
+        },
+        containedWarning: {
+          backgroundColor: theme.palette.warning.light,
+          color: theme.palette.warning.dark,
+          ':hover': {
+            backgroundColor: theme.palette.warning.main,
+            color: theme.palette.warning.contrastText,
+            boxShadow: 'none',
+          },
+        },
+        outlined: {
+          ':active': {
+            boxShadow: theme.shadows[2],
+          },
+        },
+        outlinedPrimary: {
+          borderColor: theme.palette.secondary.main,
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.primary.main,
+          ':hover': {
+            borderColor: theme.palette.secondary.dark,
+            backgroundColor: theme.palette.secondary.dark,
+            color: theme.palette.primary.main,
+            boxShadow: 'none',
+          },
+        },
+        outlinedError: {
+          ':hover': {
+            backgroundColor: theme.palette.error.light,
+          },
+        },
+        outlinedSuccess: {
+          ':hover': {
+            backgroundColor: theme.palette.success.light,
+          },
+        },
+        outlinedWarning: {
+          ':hover': {
+            backgroundColor: theme.palette.warning.light,
+          },
+        },
+      },
+    },
   },
 });
 

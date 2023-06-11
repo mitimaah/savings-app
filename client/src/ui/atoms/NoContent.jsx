@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import no_content from '../../assets/no_content.png';
+import NoContentImage from 'assets/no_content.png';
 
 export const NoContent = () => {
   return (
@@ -11,7 +11,13 @@ export const NoContent = () => {
         flexDirection: 'column',
       }}
     >
-      <img alt="" width={202} height={202} src={no_content} loading="lazy" />
+      <img
+        alt=""
+        width={202}
+        height={202}
+        src={NoContentImage}
+        loading="lazy"
+      />
       <Typography
         textAlign={'center'}
         mb={2}
