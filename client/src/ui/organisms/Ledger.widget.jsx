@@ -4,6 +4,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { LedgerService } from 'api';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+import { CATEGORIES_QUERY, LEDGER_QUERY } from 'queryKeys';
 import { useState } from 'react';
 import {
   ActionHeader,
@@ -18,7 +19,6 @@ import {
   Table,
 } from 'ui';
 import AddNewLedgerRecord from './AddNewLedgerRecord.modal';
-import { LEDGER_QUERY } from 'queryKeys';
 
 const headCells = [
   {
@@ -83,6 +83,7 @@ export const LedgerWidget = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [LEDGER_QUERY] });
+      queryClient.invalidateQueries({ queryKey: [CATEGORIES_QUERY] });
     },
   });
 
@@ -98,11 +99,6 @@ export const LedgerWidget = () => {
   };
 
   const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleSubmit = () => {
-    // submit function - to do later
     setOpen(false);
   };
 
@@ -160,7 +156,6 @@ export const LedgerWidget = () => {
       </Grid>
       <AddNewLedgerRecord
         onClose={handleClose}
-        onSubmit={handleSubmit}
         open={open}
         type={transactionType}
       />

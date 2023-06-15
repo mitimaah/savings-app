@@ -6,8 +6,13 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static create() {
-    // TODO: Implement me
+  static create({ requestBody }) {
+    return request({
+      method: 'POST',
+      path: `/ledger`,
+      body: requestBody,
+      mediaType: 'application/json',
+    });
   }
 
   /**

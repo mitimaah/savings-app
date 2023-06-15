@@ -1,5 +1,5 @@
 import { BudgetService } from 'api';
-import { BUDGET_QUERY } from 'queryKeys';
+import { BUDGET_QUERY, CATEGORIES_QUERY } from 'queryKeys';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import {
@@ -25,6 +25,7 @@ export const BudgetTableWidget = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
+      queryClient.invalidateQueries({ queryKey: [CATEGORIES_QUERY] });
     },
   });
 
