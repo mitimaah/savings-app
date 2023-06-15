@@ -9,7 +9,7 @@ import { BudgetTableWidget } from 'ui/organisms/BudgetTable.widget';
 export const BudgetPage = () => {
   const [open, setOpen] = useState(false);
 
-  const handleOpen = (type) => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -18,7 +18,6 @@ export const BudgetPage = () => {
   };
 
   const handleSubmit = () => {
-    // submit function - to do later
     setOpen(false);
   };
 
