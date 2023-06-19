@@ -112,7 +112,6 @@ export const LedgerWidget = () => {
             <Box
               sx={{
                 display: 'flex',
-                alignItems: 'center',
                 justifyContent: 'space-between',
                 gap: '1rem',
                 flexDirection: 'row',
