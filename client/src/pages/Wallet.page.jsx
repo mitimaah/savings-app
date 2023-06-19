@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { LedgerWidget, Page } from 'ui';
 import DoughnutChart from 'ui/organisms/DoughnutChart';
+import HorizontalBarChart from 'ui/organisms/HorizontalBarChart';
 
 export const WalletPage = () => (
   <Page title={'Portfel'}>
@@ -13,7 +14,7 @@ export const WalletPage = () => (
           <DoughnutChart />
         </Grid>
         <Grid item xs={12} data-test-id={'wallet-bottom-sidebar'}>
-          {/*  TODO in task 5 */}
+          <HorizontalBarChart />
         </Grid>
       </Grid>
     </Grid>

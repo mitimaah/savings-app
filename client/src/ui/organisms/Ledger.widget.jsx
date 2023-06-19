@@ -4,7 +4,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { LedgerService } from 'api';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-import { CATEGORIES_QUERY, LEDGER_QUERY } from 'queryKeys';
+import { BUDGET_QUERY, CATEGORIES_QUERY, LEDGER_QUERY, SUMMARY_QUERY } from 'queryKeys';
 import { useState } from 'react';
 import {
   ActionHeader,
@@ -84,6 +84,10 @@ export const LedgerWidget = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [LEDGER_QUERY] });
       queryClient.invalidateQueries({ queryKey: [CATEGORIES_QUERY] });
+      queryClient.invalidateQueries({ queryKey: [SUMMARY_QUERY] });
+      queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
+
+      
     },
   });
 

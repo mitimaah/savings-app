@@ -12,8 +12,8 @@ const options = {
   plugins: {
     legend: {
       display: true,
-      position: 'bottom',
-      align: 'start',
+      position: 'left',
+      align: 'end',
       labels: { usePointStyle: true },
     },
   },
@@ -29,7 +29,7 @@ const DoughnutChart = () => {
     labels: data?.spending.map((item) => item.categoryName),
     datasets: [
       {
-        label: '# of Votes',
+        label: 'spending-categories',
         data: data?.spending.map((item) => item.amountInCents),
         backgroundColor: data?.spending.map((item) => item.categoryColor),
         borderWidth: 0,
