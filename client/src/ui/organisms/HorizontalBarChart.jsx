@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { BudgetService } from 'api';
 import {
   BarElement,
@@ -11,7 +12,7 @@ import {
 import { BUDGET_QUERY } from 'queryKeys';
 import { Bar } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
-import { Card, NoContent } from 'ui';
+import { Card } from 'ui';
 
 ChartJS.register(
   CategoryScale,
@@ -53,8 +54,13 @@ const HorizontalBarChart = () => {
   };
 
   return (
-    <Card title={'Budżet'} subheader={'Podsumowanie wydatków'}>
-      {isSuccess && Object.keys(barChartData).length === 0 && <NoContent />}
+    <Card
+      title={<Typography variant={'h4'}>{'Budżet'}</Typography>}
+      subheader={'Podsumowanie wydatków'}
+    >
+      {isSuccess && Object.keys(barChartData).length === 0 && (
+        <Typography>'Brak wyników'</Typography>
+      )}
       {isSuccess && Object.keys(barChartData).length > 0 && (
         <Bar options={options} data={barChartData} />
       )}

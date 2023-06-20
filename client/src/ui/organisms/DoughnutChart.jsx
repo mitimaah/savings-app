@@ -4,7 +4,8 @@ import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { SUMMARY_QUERY } from 'queryKeys';
 import { Doughnut } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
-import { Card, ColorBox, Money, NoContent } from 'ui';
+import { Card, ColorBox } from 'ui';
+import { formatCentsToDollars } from 'utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -60,13 +61,17 @@ const DoughnutChart = () => {
             flexDirection: 'row',
           }}
         >
-          <Typography>{'Saldo'}</Typography>
-          <Money inCents={data?.balance} />
+          <Typography variant={'h4'}>{'Saldo'}</Typography>
+          <Typography variant={'h3'}>
+            {formatCentsToDollars(data?.balance)} PLN
+          </Typography>
         </Box>
       }
       subheader={'Pozostała kwota'}
     >
-      {isSuccess && Object.keys(doughnutData).length === 0 && <NoContent />}
+      {isSuccess && Object.keys(doughnutData).length === 0 && (
+        <Typography>'Brak wyników'</Typography>
+      )}
       {isSuccess && Object.keys(doughnutData).length > 0 && (
         <div
           style={{
