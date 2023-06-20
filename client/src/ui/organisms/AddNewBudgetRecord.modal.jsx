@@ -33,7 +33,6 @@ const AddNewBudgetRecord = ({ open, onClose }) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
       queryClient.invalidateQueries({ queryKey: [CATEGORIES_QUERY] });
-      
     },
   });
 

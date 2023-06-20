@@ -11,7 +11,7 @@ import {
 import { BUDGET_QUERY } from 'queryKeys';
 import { Bar } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
-import { Card } from 'ui';
+import { Card, NoContent } from 'ui';
 
 ChartJS.register(
   CategoryScale,
@@ -33,13 +33,16 @@ export const options = {
 };
 
 const HorizontalBarChart = () => {
-  const { data } = useQuery({
+  const { isSuccess, data } = useQuery({
     queryKey: [BUDGET_QUERY],
     queryFn: BudgetService.findAll,
   });
 
+  const labels = data?.map((item) => item.category.name);
+  const transformedLabels = labels?.map((label) => label + ' %');
+
   const barChartData = {
-    labels: data?.map((item) => item.category.name),
+    labels: transformedLabels,
     datasets: [
       {
         label: 'spending-categories',
@@ -51,7 +54,10 @@ const HorizontalBarChart = () => {
 
   return (
     <Card title={'Budżet'} subheader={'Podsumowanie wydatków'}>
-      <Bar options={options} data={barChartData} />
+      {isSuccess && Object.keys(barChartData).length === 0 && <NoContent />}
+      {isSuccess && Object.keys(barChartData).length > 0 && (
+        <Bar options={options} data={barChartData} />
+      )}
     </Card>
   );
 };
