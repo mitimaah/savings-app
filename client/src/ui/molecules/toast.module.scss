@@ -1,0 +1,36 @@
+@keyframes fadein {
+    from {
+        transform: translateX(250px);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.5;
+    }
+}
+
+.toast {
+    width: 350px;
+    min-height: 48px;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    margin: 0.6rem 0.7rem 0.1rem 0;
+    animation: fadein 0.3s ease;
+    transform: translateX(0);
+    &Fadeout {
+        animation: fadeout 0.2s ease;
+        opacity: 0.5
+    }
+    p {
+        padding: 0.5rem
+    }
+}

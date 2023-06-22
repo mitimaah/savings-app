@@ -4,6 +4,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { LedgerService } from 'api';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+import useToast from 'hooks/useToast';
 import {
   BUDGET_QUERY,
   CATEGORIES_QUERY,
@@ -80,6 +81,8 @@ export const LedgerWidget = () => {
     queryFn: LedgerService.findAll,
   });
 
+  const toast = useToast();
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -103,6 +106,7 @@ export const LedgerWidget = () => {
   const handleOpen = (type) => {
     setOpen(true);
     setTransactionType(type);
+    toast.success('ooo');
   };
 
   const handleClose = () => {
