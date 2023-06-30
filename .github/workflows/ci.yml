@@ -1,8 +1,4 @@
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-  pull_request_target:
+on: workflow_dispatch
 
 name: CI
 
