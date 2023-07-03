@@ -1,5 +1,6 @@
 import { BudgetService } from 'api';
 import { BUDGET_QUERY, CATEGORIES_QUERY } from 'queryKeys';
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import {
@@ -13,11 +14,15 @@ import {
 } from 'ui';
 
 export const BudgetTableWidget = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const queryClient = useQueryClient();
   const { isLoading, error, data } = useQuery({
     queryKey: [BUDGET_QUERY],
     queryFn: BudgetService.findAll,
   });
+
+  const total = data?.length;
 
   const mutation = useMutation({
     mutationFn: (selected) => {
@@ -33,6 +38,17 @@ export const BudgetTableWidget = () => {
 
   const getUniqueId = (row) => {
     return row.id;
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+    queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
   };
 
   const headCells = [
@@ -91,6 +107,11 @@ export const BudgetTableWidget = () => {
       rows={data}
       getUniqueId={getUniqueId}
       deleteRecords={deleteRecords}
+      rowsPerPage={rowsPerPage}
+      page={page}
+      onPageChange={handleChangePage}
+      onRowsPerPageChange={handleChangeRowsPerPage}
+      totalRows={total}
     />
   );
 };

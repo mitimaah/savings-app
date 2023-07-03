@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { request } from '../core/request';
 
 export class LedgerService {
@@ -19,14 +18,24 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static async findAll() {
-    try {
-      const res = await axios.get('http://localhost:4320/ledger');
-      return res.data;
-    } catch (error) {
-      return error;
-    }
+  static findAll({ limit, offset }) {
+    return request({
+      method: 'GET',
+      path: `/ledger?limit=${limit}&offset=${offset}`,
+      // params: { offset, limit }, i wtedy tylko path: `ledger`
+    });
   }
+
+  // static async findAll(limit, offset) {
+  //   try {
+  //     const res = await axios.get(
+  //       `http://localhost:4320/ledger?limit=${limit}&offset=${offset}`,
+  //     );
+  //     return res.data;
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // }
 
   /**
    * @returns any

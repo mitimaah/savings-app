@@ -73,13 +73,17 @@ const adjustSign = (row) => {
 };
 
 export const LedgerWidget = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [open, setOpen] = useState(false);
   const [transactionType, setTransactionType] = useState('');
   const { isLoading, error, isSuccess, data } = useQuery({
-    queryKey: [LEDGER_QUERY],
-    queryFn: LedgerService.findAll,
+    queryKey: [LEDGER_QUERY, rowsPerPage, page],
+    queryFn: () =>
+      LedgerService.findAll({ limit: rowsPerPage, offset: page * rowsPerPage }),
   });
 
+  const total = data?.length; //tutaj powinien być użyty total zwracany z (GET)ledger
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -108,6 +112,19 @@ export const LedgerWidget = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    queryClient.invalidateQueries({ queryKey: [LEDGER_QUERY] });
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+    queryClient.invalidateQueries({ queryKey: [LEDGER_QUERY] });
+  };
+
+  console.log(data);
 
   return (
     <Card
@@ -156,7 +173,12 @@ export const LedgerWidget = () => {
               rows={data}
               getUniqueId={getUniqueId}
               deleteRecords={deleteRecords}
-            ></Table>
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              totalRows={total}
+            />
           )}
         </Grid>
       </Grid>

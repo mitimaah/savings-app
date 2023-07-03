@@ -1,3 +1,4 @@
+import { TablePagination } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import MuiTable from '@mui/material/Table';
@@ -5,12 +6,22 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import * as React from 'react';
+import { useState } from 'react';
 import { EnhancedTableHead } from './components/EnhancedTableHead';
 import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
 
-export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
-  const [selected, setSelected] = React.useState([]);
+export const Table = ({
+  headCells,
+  rows,
+  getUniqueId,
+  deleteRecords,
+  page,
+  rowsPerPage,
+  onPageChange,
+  onRowsPerPageChange,
+  totalRows
+}) => {
+  const [selected, setSelected] = useState([]);
 
   const handleSelectAllClick = (event) => {
     setSelected(event.target.checked ? rows.map((n) => getUniqueId(n)) : []);
@@ -41,7 +52,10 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
             headCells={headCells}
           />
           <TableBody>
-            {rows.slice().map((row, index) => {
+            {(rowsPerPage > 0
+              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : rows
+            ).map((row, index) => {
               const uniqueId = getUniqueId(row);
               const isItemSelected = selected.includes(uniqueId);
               const labelId = `enhanced-table-checkbox-${index}`;
@@ -80,6 +94,21 @@ export const Table = ({ headCells, rows, getUniqueId, deleteRecords }) => {
           </TableBody>
         </MuiTable>
       </TableContainer>
+      <TablePagination
+        sx={{
+          borderBottom: 'none',
+          display: 'flex',
+          justifyContent: 'flex-end',
+        }}
+        rowsPerPageOptions={[10, 20, 50]}
+        count={totalRows}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={onPageChange}
+        onRowsPerPageChange={onRowsPerPageChange}
+        showFirstButton={true}
+        showLastButton={true}
+      />
     </Box>
   );
 };
