@@ -1,39 +1,38 @@
 # Opis
-To repozytorium zawierające kod do Wyzwania React Dare IT.
-Informajce na temat zadań oraz tego jak rozpocząć pracę nad nimi będziesz otrzymywać mailowo.
+
+To repozytorium zawierające kod do React Challenge.
 
 # Pierwsze kroki
 
 ## 🧰 Instalacja pakietów NPM
 
-znajdując się w katalogu głównym repozytorium react-challenge, uruchom terminal a następnie wywołaj następującą komendę
+Znajdując się w katalogu głównym repozytorium react-challenge, uruchom terminal a następnie wywołaj następującą komendę
 
     npm i
-
 
 ✨ Terminal powinien wyglądać mniej więcej tak ✨
 
 ![Matrix terminal image](https://w0tt.files.wordpress.com/2011/06/matrix.gif?w=613&zoom=2)
 
-
-a tak naprawdę tak 
+a tak naprawdę tak
 
 ```
- adrianaolszak@Admins-MacBook-Pro > ~/WebstormProjects/non-work/dareit/react-challenge > npm i
+ mitimaah@Admins-MacBook-Pro > ~/WebstormProjects/non-work/react-challenge > npm i
 
-> challenge@1.0.0 postinstall /Users/adrianaolszak/WebstormProjects/non-work/dareit/challenge
+> challenge@1.0.0 postinstall /Users/mitimaah/WebstormProjects/non-work/challenge
 > run-p -l install:server install:client
 
-[install:client] 
-[install:client] > challenge@1.0.0 install:client /Users/adrianaolszak/WebstormProjects/non-work/dareit/challenge
+[install:client]
+[install:client] > challenge@1.0.0 install:client /Users/mitimaah/WebstormProjects/non-work/challenge
 [install:client] > cd client && npm install
-[install:client] 
-[install:server] 
-[install:server] > challenge@1.0.0 install:server /Users/adrianaolszak/WebstormProjects/non-work/dareit/challenge
+[install:client]
+[install:server]
+[install:server] > challenge@1.0.0 install:server /Users/mitimaah/WebstormProjects/non-work/challenge
 [install:server] > cd server && npm install
-[install:server] 
+[install:server]
 
 ```
+
 ⏳ instalacja może zająć trochę czasu ⏳
 
 Zwróć uwagę na `[install:client]` oraz `[install:server]`, jednocześnie przebiega instalacja dla dwóch aplikacji - client, to tam będą wykonywane zadania oraz server, który będzie zasilał apkę front-endową danymi.
@@ -54,18 +53,20 @@ Znajdująć się w katalogu głównym Twojego repozytorium uruchom terminal i wy
 
      npm run start
 
-
 Komenda ta uruchomi 2 aplikacje które będą dostępne pod następującymi adresami:
+
 - client - aplikacja reactowa - http://localhost:3000
 - server - aplikacja backendowa - http://localhost:4320
-    - dokumentacja API jest dostępna pod adresem http://localhost:4320/swagger
+  - dokumentacja API jest dostępna pod adresem http://localhost:4320/swagger
 
 ### Storybook
+
 Do niektórych zadań będziesz potrzebować dodatkowej aplikacji - Storybook, która umożliwi Ci pracę nad niektórymi zadaniami. Treść zadania będzie wskazywać na potrzebę jej użycia.
 
 Storybook służy do pracy nad komponentami w izolacji. Jeżeli chcesz nanosić zmiany w wyglądzie lub funkcjonowaniu poszczególnych komponentów muszisz edytować odpowiadajce im pliki w katalogu `client/src/ui`.
 
 Aby uruchomić storybook należy wywołać następującą komendę znajdując się w katalogu głównym Twojego repozytorium:
+
 ```bash
 npm run storybook
 ```
@@ -89,7 +90,5 @@ To polecenie uruchomi panel Cypress, w którym możesz uruchomić wszystkie lub 
 # FAQ
 
 ## Jak dodać nowy pakiet npm?
-Uruchom terminal, przejdź do katalogu `/client` oraz wpisz polecenie `npm i :nazwa-pakietu`
 
-## Co zrobić jeśli mam problem który nie został opisany w tej sekcji?
-Skorzystaj z dotępnej społeczności na dareit.circle.so i napisz Post. Mentorki lub inni uczestnicy napewno Ci pomogą.
+Uruchom terminal, przejdź do katalogu `/client` oraz wpisz polecenie `npm i :nazwa-pakietu`

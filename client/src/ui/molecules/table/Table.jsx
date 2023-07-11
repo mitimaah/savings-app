@@ -19,7 +19,7 @@ export const Table = ({
   rowsPerPage,
   onPageChange,
   onRowsPerPageChange,
-  totalRows
+  totalRows,
 }) => {
   const [selected, setSelected] = useState([]);
 
