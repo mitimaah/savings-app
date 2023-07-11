@@ -1,9 +1,9 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import { Box, Grid, Typography } from '@mui/material';
-import { LedgerService } from 'api';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+import { LedgerService } from 'api';
 import {
   BUDGET_QUERY,
   CATEGORIES_QUERY,
@@ -25,28 +25,48 @@ import {
 } from 'ui';
 import AddNewLedgerRecord from './AddNewLedgerRecord.modal';
 
+interface CategoryType {
+  id: string;
+  budgetId: string;
+  color: string;
+  name: string;
+  ledgerIds: string[];
+}
+
+interface RowType {
+  id: string;
+  title: string;
+  mode: string;
+  createdAt: string;
+  categoryId: string;
+  amountInCents: number;
+  category: CategoryType;
+}
+
 const headCells = [
   {
     id: '1',
     label: 'Nazwa',
-    renderCell: (row) => <Typography variant="inherit">{row.title}</Typography>,
+    renderCell: (row: RowType) => (
+      <Typography variant="inherit">{row.title}</Typography>
+    ),
   },
   {
     id: '2',
     label: 'Kategoria',
-    renderCell: (row) => (
+    renderCell: (row: RowType) => (
       <CategoryCell color={row.category.color} name={row.category.name} />
     ),
   },
   {
     id: '3',
     label: 'Data',
-    renderCell: (row) => <LocalizedDate date={row.createdAt} />,
+    renderCell: (row: RowType) => <LocalizedDate date={row.createdAt} />,
   },
   {
     id: '4',
     label: 'Obecna kwota',
-    renderCell: (row) => (
+    renderCell: (row: RowType) => (
       <Money
         color={adjustColor(row)}
         inCents={row.amountInCents}
@@ -56,7 +76,7 @@ const headCells = [
   },
 ];
 
-const adjustColor = (row) => {
+const adjustColor = (row: RowType) => {
   if (row.mode === 'INCOME') {
     return 'green';
   } else if (row.mode === 'EXPENSE') {
@@ -64,7 +84,7 @@ const adjustColor = (row) => {
   }
 };
 
-const adjustSign = (row) => {
+const adjustSign = (row: RowType) => {
   if (row.mode === 'INCOME') {
     return '+';
   } else if (row.mode === 'EXPENSE') {
@@ -79,16 +99,15 @@ export const LedgerWidget = () => {
   const [transactionType, setTransactionType] = useState('');
   const { isLoading, error, isSuccess, data } = useQuery({
     queryKey: [LEDGER_QUERY, rowsPerPage, page],
-    queryFn: () =>
-      LedgerService.findAll({ limit: rowsPerPage, offset: page * rowsPerPage }),
+    queryFn: () => LedgerService.findAll(rowsPerPage, page * rowsPerPage),
   });
 
   const total = data?.length; //tutaj powinien być użyty total zwracany z (GET)ledger
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (selected) => {
-      return LedgerService.remove({ ids: selected });
+    mutationFn: (selected: string[]) => {
+      return LedgerService.remove(selected);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [LEDGER_QUERY] });
@@ -98,13 +117,15 @@ export const LedgerWidget = () => {
     },
   });
 
-  const deleteRecords = (ids) => mutation.mutate(ids);
+  const deleteRecords = (selected: string[]) => {
+    mutation.mutate(selected);
+  };
 
-  const getUniqueId = (row) => {
+  const getUniqueId = (row: RowType) => {
     return row.id;
   };
 
-  const handleOpen = (type) => {
+  const handleOpen = (type: string) => {
     setOpen(true);
     setTransactionType(type);
   };
@@ -113,21 +134,25 @@ export const LedgerWidget = () => {
     setOpen(false);
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
     setPage(newPage);
     queryClient.invalidateQueries({ queryKey: [LEDGER_QUERY] });
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     queryClient.invalidateQueries({ queryKey: [LEDGER_QUERY] });
   };
 
-  console.log(data);
-
   return (
     <Card
+      subheader=""
       title={
         <ActionHeader
           variant={'h1'}

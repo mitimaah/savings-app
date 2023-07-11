@@ -10,6 +10,45 @@ import { useState } from 'react';
 import { EnhancedTableHead } from './components/EnhancedTableHead';
 import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
 
+interface CategoryType {
+  id: string;
+  budgetId: string;
+  color: string;
+  name: string;
+  ledgerIds: string[];
+}
+
+interface RowType {
+  id: string;
+  title: string;
+  mode: string;
+  createdAt: string;
+  categoryId: string;
+  amountInCents: number;
+  category: CategoryType;
+}
+
+interface HeadType {
+  id: string;
+  label: string;
+  renderCell: (row: RowType) => React.ReactNode;
+}
+
+interface TablePropsTypes {
+  headCells: HeadType[];
+  rows: RowType[];
+  getUniqueId: (row: RowType) => string;
+  deleteRecords: (n: string[]) => void;
+  page: number;
+  rowsPerPage: number;
+  onPageChange: (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => void;
+  onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  totalRows: number;
+}
+
 export const Table = ({
   headCells,
   rows,
@@ -19,15 +58,15 @@ export const Table = ({
   rowsPerPage,
   onPageChange,
   onRowsPerPageChange,
-  totalRows
-}) => {
-  const [selected, setSelected] = useState([]);
+  totalRows,
+}: TablePropsTypes) => {
+  const [selected, setSelected] = useState<string[]>([]);
 
-  const handleSelectAllClick = (event) => {
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelected(event.target.checked ? rows.map((n) => getUniqueId(n)) : []);
   };
 
-  const handleClick = (event, id) => {
+  const handleClick = (event: React.MouseEvent, id: string) => {
     setSelected(
       selected.includes(id)
         ? selected.filter((selectedId) => selectedId !== id)
@@ -79,7 +118,7 @@ export const Table = ({
                       }}
                     />
                   </TableCell>
-                  {headCells.map((head) => {
+                  {headCells.map((head: HeadType) => {
                     const renderedRow = head.renderCell(row) || '';
 
                     return (

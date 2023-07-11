@@ -1,15 +1,22 @@
 import { request } from '../core/request';
 
+type NewLedgerRecordType = {
+  mode: string;
+  amountInCents: number;
+  categoryId: number;
+  title: string;
+};
+
 export class LedgerService {
   /**
    * @returns any
    * @throws ApiError
    */
-  static create({ requestBody }) {
+  static create(newLedgerRecord: NewLedgerRecordType) {
     return request({
       method: 'POST',
       path: `/ledger`,
-      body: requestBody,
+      body: newLedgerRecord,
       mediaType: 'application/json',
     });
   }
@@ -18,11 +25,11 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static findAll({ limit, offset }) {
+  static findAll(limit: number, offset: number) {
     return request({
       method: 'GET',
-      path: `/ledger?limit=${limit}&offset=${offset}`,
-      // params: { offset, limit }, i wtedy tylko path: `ledger`
+      path: `/ledger`,
+      params: { offset, limit },
     });
   }
 
@@ -41,7 +48,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static findOne({ id }) {
+  static findOne(id: any) {
     // TODO: Implement me
   }
 
@@ -49,7 +56,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static update({ id, requestBody }) {
+  static update(id: any, requestBody: any) {
     // TODO: Implement me
   }
 
@@ -57,7 +64,7 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static remove({ ids }) {
+  static remove(ids: string[]) {
     return ids.length === 1
       ? request({
           method: 'DELETE',
