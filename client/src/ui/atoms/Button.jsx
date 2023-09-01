@@ -1,5 +1,4 @@
 import { Button as MuiButton } from '@mui/material';
-import { StyledEngineProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
 export function Button({
@@ -12,18 +11,16 @@ export function Button({
   onClick,
 }) {
   return (
-    <StyledEngineProvider injectFirst>
-      <MuiButton
-        startIcon={startIcon}
-        endIcon={endIcon}
-        variant={variant}
-        color={color}
-        disabled={disabled}
-        onClick={onClick}
-      >
-        {children}
-      </MuiButton>
-    </StyledEngineProvider>
+    <MuiButton
+      startIcon={startIcon}
+      endIcon={endIcon}
+      variant={variant}
+      color={color}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </MuiButton>
   );
 }
 

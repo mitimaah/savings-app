@@ -141,7 +141,7 @@ theme = createTheme(theme, {
     MuiToolbar: {
       styleOverrides: {
         root: {
-          borderRadius: theme.shape.borderRadius,
+          borderRadius: 0,
         },
       },
     },
@@ -227,6 +227,15 @@ theme = createTheme(theme, {
         outlinedWarning: {
           ':hover': {
             backgroundColor: theme.palette.warning.light,
+          },
+        },
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          '&.Mui-selected': {
+            backgroundColor: '#F9FAFD',
           },
         },
       },

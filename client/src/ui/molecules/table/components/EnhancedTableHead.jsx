@@ -1,8 +1,4 @@
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import Checkbox from '@mui/material/Checkbox';
-import * as React from 'react';
+import { Checkbox, TableCell, TableHead, TableRow } from '@mui/material';
 
 export function EnhancedTableHead({
   onSelectAllClick,

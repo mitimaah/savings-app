@@ -2,23 +2,28 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Grid } from '@mui/material';
 import { useState } from 'react';
 
-import { ActionHeader, Button, Card, Page } from 'ui';
-import AddNewBudgetRecord from 'ui/organisms/AddNewBudgetRecord.modal';
-import { BudgetTableWidget } from 'ui/organisms/BudgetTable.widget';
+import {
+  ActionHeader,
+  AddNewBudgetRecordModal,
+  BudgetTableWidget,
+  Button,
+  Card,
+  Page,
+} from 'ui';
 
 export const BudgetPage = () => {
-  const [open, setOpen] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleOpen = () => {
-    setOpen(true);
+    setModalVisible(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setModalVisible(false);
   };
 
   const handleSubmit = () => {
-    setOpen(false);
+    setModalVisible(false);
   };
 
   return (
@@ -46,10 +51,10 @@ export const BudgetPage = () => {
           </Grid>
         </Grid>
       </Card>
-      <AddNewBudgetRecord
+      <AddNewBudgetRecordModal
         onClose={handleClose}
         onSubmit={handleSubmit}
-        open={open}
+        open={modalVisible}
       />
     </Page>
   );

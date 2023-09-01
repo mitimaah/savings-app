@@ -1,6 +1,6 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import { LedgerService } from 'api';
@@ -13,6 +13,7 @@ import {
 import { useState } from 'react';
 import {
   ActionHeader,
+  AddNewLedgerRecord,
   Button,
   Card,
   CategoryCell,
@@ -23,7 +24,6 @@ import {
   NoContent,
   Table,
 } from 'ui';
-import AddNewLedgerRecord from './AddNewLedgerRecord.modal';
 
 interface CategoryType {
   id: string;
@@ -45,27 +45,25 @@ interface RowType {
 
 const headCells = [
   {
-    id: '1',
+    id: 'title',
     label: 'Nazwa',
-    renderCell: (row: RowType) => (
-      <Typography variant="inherit">{row.title}</Typography>
-    ),
+    renderCell: (row: RowType) => row.title,
   },
   {
-    id: '2',
+    id: 'categoryName',
     label: 'Kategoria',
     renderCell: (row: RowType) => (
       <CategoryCell color={row.category.color} name={row.category.name} />
     ),
   },
   {
-    id: '3',
+    id: 'createdAt',
     label: 'Data',
     renderCell: (row: RowType) => <LocalizedDate date={row.createdAt} />,
   },
   {
-    id: '4',
-    label: 'Obecna kwota',
+    id: 'amountInCents',
+    label: 'Kwota',
     renderCell: (row: RowType) => (
       <Money
         color={adjustColor(row)}
@@ -95,9 +93,10 @@ const adjustSign = (row: RowType) => {
 export const LedgerWidget = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [openModalType, setOpenModalType] = useState(null);
   const [open, setOpen] = useState(false);
   const [transactionType, setTransactionType] = useState('');
-  const { isLoading, error, isSuccess, data } = useQuery({
+  const { isLoading, error, data } = useQuery({
     queryKey: [LEDGER_QUERY, rowsPerPage, page],
     queryFn: () => LedgerService.findAll(rowsPerPage, page * rowsPerPage),
   });
@@ -132,6 +131,7 @@ export const LedgerWidget = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setTransactionType('');
   };
 
   const handleChangePage = (
@@ -187,26 +187,22 @@ export const LedgerWidget = () => {
         />
       }
     >
-      <Grid container>
-        <Grid item xs={12}>
-          {isLoading && <Loader />}
-          {error && <Error />}
-          {isSuccess && data.length === 0 && <NoContent />}
-          {isSuccess && data.length > 0 && (
-            <Table
-              headCells={headCells}
-              rows={data}
-              getUniqueId={getUniqueId}
-              deleteRecords={deleteRecords}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              totalRows={total}
-            />
-          )}
-        </Grid>
-      </Grid>
+      {isLoading && <Loader />}
+      {error && <Error error={error} />}
+      {!isLoading && !error && !data && <NoContent />}
+      {!isLoading && !error && !!data?.length && (
+        <Table
+          headCells={headCells}
+          rows={data}
+          getUniqueId={getUniqueId}
+          deleteRecords={deleteRecords}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          totalRows={total}
+        />
+      )}
       <AddNewLedgerRecord
         onClose={handleClose}
         open={open}

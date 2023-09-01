@@ -3,15 +3,14 @@ import { BudgetService, CategoryService } from 'api';
 import { BUDGET_QUERY, CATEGORIES_QUERY } from 'queryKeys';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { CategoryCell } from 'ui';
-import BasicModal from 'ui/molecules/Modal';
+import { Modal, CategoryCell } from 'ui';
 
 const defaultValues = {
   amount: '',
   category: '',
 };
 
-const AddNewBudgetRecord = ({ open, onClose }) => {
+export const AddNewBudgetRecordModal = ({ open, onClose }) => {
   const {
     handleSubmit,
     control,
@@ -51,11 +50,11 @@ const AddNewBudgetRecord = ({ open, onClose }) => {
 
   return (
     <form>
-      <BasicModal
+      <Modal
         open={open}
         onClose={onClose}
         onSubmit={handleSubmit(onSubmit)}
-        description={'Zdefiniuj budżet'}
+        title={'Zdefiniuj budżet'}
         disabled={!isValid}
       >
         <Box
@@ -121,9 +120,7 @@ const AddNewBudgetRecord = ({ open, onClose }) => {
             )}
           />
         </Box>
-      </BasicModal>
+      </Modal>
     </form>
   );
 };
-
-export default AddNewBudgetRecord;

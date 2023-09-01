@@ -1,15 +1,16 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { SummaryService } from 'api';
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { SUMMARY_QUERY } from 'queryKeys';
 import { Doughnut } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
-import { Card, ColorBox } from 'ui';
-import { formatCentsToDollars } from 'utils';
+import { Card, Error, Loader, Money } from 'ui';
+import { CustomChartLegendItem } from 'ui/molecules/CustomChartLegendItem';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const options = {
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       display: false,
@@ -17,28 +18,11 @@ const options = {
   },
 };
 
-const LegendItem = (item) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}
-    >
-      <ColorBox color={item.color} />
-      <Typography>{item.label}</Typography>
-    </Box>
-  );
-};
-
-const DoughnutChart = () => {
-  const { isSuccess, data } = useQuery({
+export const DoughnutChart = () => {
+  const { isSuccess, isLoading, error, data } = useQuery({
     queryKey: [SUMMARY_QUERY],
     queryFn: SummaryService.findAll,
   });
-
-  const transformedData = data?.spending;
 
   const doughnutData = {
     labels: data?.spending.map((item) => item.categoryName),
@@ -58,47 +42,49 @@ const DoughnutChart = () => {
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
-            flexDirection: 'row',
           }}
         >
           <Typography variant={'h4'}>{'Saldo'}</Typography>
-          <Typography variant={'h3'}>
-            {formatCentsToDollars(data?.balance)} PLN
+          <Typography
+            component="h3"
+            variant="h4"
+            marginBottom={1}
+            fontWeight="bold"
+          >
+            <Money inCents={data?.balance} />
           </Typography>
         </Box>
       }
       subheader={'Pozostała kwota'}
     >
-      {isSuccess && Object.keys(doughnutData).length === 0 && (
-        <Typography>'Brak wyników'</Typography>
-      )}
-      {isSuccess && Object.keys(doughnutData).length > 0 && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <div style={{ width: '100%', height: 'auto' }}>
-            <Doughnut
-              style={{ margin: '2rem 6rem' }}
-              data={doughnutData}
-              options={options}
-            />
-            <div style={{ marginTop: '20px', alignItems: 'left' }}>
-              {transformedData?.map((item) => (
-                <LegendItem
+      {isLoading && <Loader />}
+      {!isLoading && error && <Error error={error} />}
+      <Grid container mt={4}>
+        {isSuccess && Object.keys(doughnutData).length === 0 && (
+          <Typography>Brak wyników</Typography>
+        )}
+        {isSuccess && Object.keys(doughnutData).length > 0 && (
+          <>
+            <Grid item xs={12} alignItems={'center'}>
+              <Doughnut
+                data={doughnutData}
+                height={200}
+                width={200}
+                options={options}
+              />
+            </Grid>
+            <Grid item xs={12} mt={3}>
+              {data?.spending?.map((item) => (
+                <CustomChartLegendItem
                   key={item.categoryId}
-                  label={item.categoryName}
+                  name={item.categoryName}
                   color={item.categoryColor}
-                ></LegendItem>
+                ></CustomChartLegendItem>
               ))}
-            </div>
-          </div>
-        </div>
-      )}
+            </Grid>
+          </>
+        )}
+      </Grid>
     </Card>
   );
 };
-export default DoughnutChart;

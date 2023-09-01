@@ -1,22 +1,27 @@
 import { request } from '../core/request';
 
-type NewLedgerRecordType = {
-  mode: string;
-  amountInCents: number;
-  categoryId: number;
-  title: string;
+type CreateLedgerRequest = {
+  [k: string]: unknown;
 };
+
+type FindOneLedgerRequest = {
+  id: string;
+};
+
+// type RemoveLedgerRequest  = {
+//   ids: string[];
+// }
 
 export class LedgerService {
   /**
    * @returns any
    * @throws ApiError
    */
-  static create(newLedgerRecord: NewLedgerRecordType) {
+  static create({ requestBody }: CreateLedgerRequest) {
     return request({
       method: 'POST',
       path: `/ledger`,
-      body: newLedgerRecord,
+      body: requestBody,
       mediaType: 'application/json',
     });
   }
@@ -48,8 +53,11 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static findOne(id: any) {
-    // TODO: Implement me
+  static findOne({ id }: FindOneLedgerRequest) {
+    return request({
+      method: 'GET',
+      path: `/ledger/${id}`,
+    });
   }
 
   /**
@@ -57,7 +65,12 @@ export class LedgerService {
    * @throws ApiError
    */
   static update(id: any, requestBody: any) {
-    // TODO: Implement me
+    return request({
+      method: 'PATCH',
+      path: `/ledger/${id}`,
+      body: requestBody,
+      mediaType: 'application/json',
+    });
   }
 
   /**
@@ -65,6 +78,7 @@ export class LedgerService {
    * @throws ApiError
    */
   static remove(ids: string[]) {
+    //  static remove({ ids }: RemoveLedgerRequest) {
     return ids.length === 1
       ? request({
           method: 'DELETE',

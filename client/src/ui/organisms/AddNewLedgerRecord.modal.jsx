@@ -16,8 +16,7 @@ import {
 } from 'queryKeys';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { CategoryCell } from 'ui';
-import BasicModal from 'ui/molecules/Modal';
+import { CategoryCell, Modal } from 'ui';
 
 const defaultValues = {
   name: '',
@@ -25,7 +24,7 @@ const defaultValues = {
   category: '',
 };
 
-const AddNewLedgerRecord = ({ open, type, onClose }) => {
+export const AddNewLedgerRecord = ({ open, type, onClose }) => {
   const {
     handleSubmit,
     control,
@@ -66,20 +65,18 @@ const AddNewLedgerRecord = ({ open, type, onClose }) => {
     reset();
   };
 
-  const modalHeader = (type) => {
-    if (type === 'INCOME') {
-      return 'Dodaj wpływ';
-    } else if (type === 'EXPENSE') {
-      return 'Dodaj wydatek';
-    }
-  };
-
   return (
-    <BasicModal
+    <Modal
       open={open}
       onClose={onClose}
       onSubmit={handleSubmit(onSubmit)}
-      description={modalHeader(type)}
+      title={
+        type === 'INCOME'
+          ? 'Dodaj wpływ'
+          : type === 'EXPENSE'
+          ? 'Dodaj wydatek'
+          : ''
+      }
       disabled={!isValid}
     >
       <Box
@@ -165,8 +162,6 @@ const AddNewLedgerRecord = ({ open, type, onClose }) => {
           </FormControl>
         )}
       </Box>
-    </BasicModal>
+    </Modal>
   );
 };
-
-export default AddNewLedgerRecord;

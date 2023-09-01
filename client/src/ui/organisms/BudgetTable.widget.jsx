@@ -36,10 +36,6 @@ export const BudgetTableWidget = () => {
 
   const deleteRecords = (ids) => mutation.mutate(ids);
 
-  const getUniqueId = (row) => {
-    return row.id;
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
@@ -51,39 +47,37 @@ export const BudgetTableWidget = () => {
     queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
   };
 
-  const headCells = [
+  const tableDefinition = [
     {
-      id: '1',
+      id: 'name',
       label: 'Nazwa',
       renderCell: (row) => (
         <CategoryCell color={row.category.color} name={row.category.name} />
       ),
     },
     {
-      id: '2',
+      id: 'amount',
       label: 'Planowane wydatki',
       renderCell: (row) => <Money inCents={row.amountInCents} />,
     },
     {
-      id: '3',
+      id: 'current-amount',
       label: 'Obecna kwota',
       renderCell: (row) => <Money inCents={row.currentSpending} />,
     },
     {
-      id: '4',
+      id: 'status',
       label: 'Status',
       renderCell: (row) => {
-        if (row.currentSpending === row.amountInCents) {
-          return 'Wykorzystany';
-        } else if (row.currentSpending > row.amountInCents) {
-          return 'Przekroczone';
-        } else if (row.currentSpending < row.amountInCents) {
-          return 'W normie';
-        }
+        return row.currentSpending === row.amountInCents
+          ? 'Wykorzystany'
+          : row.currentSpending > row.amountInCents
+          ? 'Przekroczone'
+          : 'W normie';
       },
     },
     {
-      id: '5',
+      id: 'createdAt',
       label: 'Data utworzenia',
       renderCell: (row) => <LocalizedDate date={row.createdAt} />,
     },
@@ -103,9 +97,9 @@ export const BudgetTableWidget = () => {
 
   return (
     <Table
-      headCells={headCells}
+      headCells={tableDefinition}
       rows={data}
-      getUniqueId={getUniqueId}
+      getUniqueId={(row) => row.id}
       deleteRecords={deleteRecords}
       rowsPerPage={rowsPerPage}
       page={page}
