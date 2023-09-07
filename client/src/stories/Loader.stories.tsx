@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Loader } from '../ui/atoms/Loader';
 import { Grid, Typography } from '@mui/material';
 

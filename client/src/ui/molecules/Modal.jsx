@@ -1,5 +1,5 @@
 import {
-  Box,
+  Card,
   CardActions,
   CardContent,
   CardHeader,
@@ -32,7 +32,7 @@ export const Modal = ({
 }) => {
   return (
     <MuiModal open={open} onBackdropClick={onClose}>
-      <Box sx={styleModal}>
+      <Card sx={styleModal}>
         <CardHeader
           id="modal-modal-title"
           title={title}
@@ -58,7 +58,7 @@ export const Modal = ({
             Zapisz
           </Button>
         </CardActions>
-      </Box>
+      </Card>
     </MuiModal>
   );
 };

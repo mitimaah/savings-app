@@ -93,9 +93,9 @@ const adjustSign = (row: RowType) => {
 export const LedgerWidget = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  // const [openModalType, setOpenModalType] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [transactionType, setTransactionType] = useState('');
+  const [openModalType, setOpenModalType] = useState<string | null>(null);
+  // const [open, setOpen] = useState(false);
+  // const [transactionType, setTransactionType] = useState('');
   const { isLoading, error, data } = useQuery({
     queryKey: [LEDGER_QUERY, rowsPerPage, page],
     queryFn: () => LedgerService.findAll(rowsPerPage, page * rowsPerPage),
@@ -124,14 +124,8 @@ export const LedgerWidget = () => {
     return row.id;
   };
 
-  const handleOpen = (type: string) => {
-    setOpen(true);
-    setTransactionType(type);
-  };
-
   const handleClose = () => {
-    setOpen(false);
-    setTransactionType('');
+    setOpenModalType(null);
   };
 
   const handleChangePage = (
@@ -170,7 +164,7 @@ export const LedgerWidget = () => {
                 variant={'outlined'}
                 startIcon={<AddRoundedIcon />}
                 color={'primary'}
-                onClick={() => handleOpen('INCOME')}
+                onClick={() => setOpenModalType('INCOME')}
               >
                 Wpłać
               </Button>
@@ -178,7 +172,7 @@ export const LedgerWidget = () => {
                 variant={'outlined'}
                 startIcon={<RemoveRoundedIcon />}
                 color={'primary'}
-                onClick={() => handleOpen('EXPENSE')}
+                onClick={() => setOpenModalType('EXPENSE')}
               >
                 Wypłać
               </Button>
@@ -205,8 +199,8 @@ export const LedgerWidget = () => {
       )}
       <AddNewLedgerRecord
         onClose={handleClose}
-        open={open}
-        type={transactionType}
+        open={!!openModalType}
+        type={openModalType}
       />
     </Card>
   );

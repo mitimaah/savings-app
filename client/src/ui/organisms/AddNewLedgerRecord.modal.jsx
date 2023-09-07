@@ -65,10 +65,15 @@ export const AddNewLedgerRecord = ({ open, type, onClose }) => {
     reset();
   };
 
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
+
   return (
     <Modal
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       onSubmit={handleSubmit(onSubmit)}
       title={
         type === 'INCOME'
@@ -113,6 +118,7 @@ export const AddNewLedgerRecord = ({ open, type, onClose }) => {
         <Controller
           name="amount"
           control={control}
+          type='number'
           rules={{
             required: 'Kwota nie może być pusta',
             validate: (value) => {
