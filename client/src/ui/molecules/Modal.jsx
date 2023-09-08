@@ -29,6 +29,7 @@ export const Modal = ({
   disabled,
   onClose,
   onSubmit,
+  isToSave = true,
 }) => {
   return (
     <MuiModal open={open} onBackdropClick={onClose}>
@@ -49,14 +50,16 @@ export const Modal = ({
           <Button color={'primary'} variant={'outlined'} onClick={onClose}>
             Anuluj
           </Button>
-          <Button
-            color={'primary'}
-            variant={'contained'}
-            onClick={onSubmit}
-            disabled={disabled}
-          >
-            Zapisz
-          </Button>
+          {isToSave && (
+            <Button
+              color={'primary'}
+              variant={'contained'}
+              onClick={onSubmit}
+              disabled={disabled}
+            >
+              Zapisz
+            </Button>
+          )}
         </CardActions>
       </Card>
     </MuiModal>

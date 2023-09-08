@@ -1,14 +1,11 @@
-import { Box, MenuItem, TextField } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
 import { BudgetService, CategoryService } from 'api';
-import { BUDGET_QUERY, CATEGORIES_QUERY } from 'queryKeys';
+import { BUDGET_QUERY, PARTIAL_CATEGORIES_QUERY } from 'queryKeys';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { CategoryCell, Error, Loader, Modal } from 'ui';
-
-// const defaultValues = {
-//   amount: '',
-//   category: '',
-// };
+import { Error, Loader, Modal } from 'ui';
+import { CategoryField } from 'ui/molecules/CategoryField';
+import { formatDollarsToCents } from 'utils';
 
 export const AddNewBudgetRecordModal = ({ open, onClose }) => {
   const queryClient = useQueryClient();
@@ -26,13 +23,13 @@ export const AddNewBudgetRecordModal = ({ open, onClose }) => {
     isLoading,
     error,
     data: categories,
-  } = useQuery(CATEGORIES_QUERY, () => CategoryService.findAll(true));
+  } = useQuery(PARTIAL_CATEGORIES_QUERY, () => CategoryService.findAll(true));
 
   const mutation = useMutation({
     mutationFn: BudgetService.create,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
-      queryClient.invalidateQueries({ queryKey: [CATEGORIES_QUERY] });
+      queryClient.refetchQueries({ queryKey: [BUDGET_QUERY] });
+      queryClient.refetchQueries({ queryKey: [PARTIAL_CATEGORIES_QUERY] });
     },
   });
 
@@ -42,8 +39,8 @@ export const AddNewBudgetRecordModal = ({ open, onClose }) => {
 
   const onSubmit = (record) => {
     createRecord({
-      amountInCents: record.amount * 100,
-      categoryId: record.category,
+      amountInCents: formatDollarsToCents(record.amount),
+      categoryId: record.categoryId,
     });
     onClose();
     reset();
@@ -54,8 +51,6 @@ export const AddNewBudgetRecordModal = ({ open, onClose }) => {
     onClose();
   };
 
-  console.log(categories);
-
   return (
     <form>
       <Modal
@@ -64,11 +59,15 @@ export const AddNewBudgetRecordModal = ({ open, onClose }) => {
         onSubmit={handleSubmit(onSubmit)}
         title={'Zdefiniuj budżet'}
         disabled={!isValid}
+        isToSave={!!categories?.length}
       >
         {isLoading && <Loader />}
         {error && <Error error={error} />}
         {!isLoading && !error && !categories?.length ? (
-          'Wszystkie kategorie są przypisane do budżetu. Aby zredefiniować usuń jeden z wpisów.'
+          <Typography sx={{ mt: '1rem' }}>
+            Wszystkie kategorie są przypisane do budżetu. Aby zredefiniować usuń
+            jeden z wpisów.
+          </Typography>
         ) : (
           <Box
             sx={{
@@ -81,6 +80,7 @@ export const AddNewBudgetRecordModal = ({ open, onClose }) => {
             <Controller
               name="amount"
               control={control}
+              // defaultValue=""
               rules={{
                 required: 'Kwota nie może być pusta',
                 validate: (value) => {
@@ -95,10 +95,6 @@ export const AddNewBudgetRecordModal = ({ open, onClose }) => {
                 fieldState: { error },
               }) => (
                 <TextField
-                  InputLabelProps={{
-                    style: { color: '#1F2633' },
-                    // shrink: false,
-                  }}
                   label="Kwota"
                   variant="outlined"
                   type="number"
@@ -119,7 +115,7 @@ export const AddNewBudgetRecordModal = ({ open, onClose }) => {
             <Controller
               control={control}
               defaultValue=""
-              name="category"
+              name="categoryId"
               rules={{
                 required: { value: true, message: 'Wybierz kategorię' },
               }}
@@ -127,20 +123,13 @@ export const AddNewBudgetRecordModal = ({ open, onClose }) => {
                 field: { onChange, value },
                 fieldState: { error },
               }) => (
-                <TextField
-                  select
+                <CategoryField
+                  categories={categories}
                   value={value}
                   onChange={onChange}
-                  label="Kategoria"
                   error={!!error}
                   helperText={error ? error.message : null}
-                >
-                  {categories.map(({ color, name, id }) => (
-                    <MenuItem key={id} value={id}>
-                      <CategoryCell color={color} name={name} />
-                    </MenuItem>
-                  ))}
-                </TextField>
+                />
               )}
             />
           </Box>
