@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import { Controller } from 'react-hook-form';
 
-export const AmountFormField = ({control, value, field, error}) => {
+export const AmountFormField = ({ control, value, field, error }) => {
   return (
     <Controller
       name="amount"
