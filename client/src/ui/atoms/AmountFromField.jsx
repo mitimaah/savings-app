@@ -1,4 +1,5 @@
 import { TextField } from '@mui/material';
+import React from 'react';
 import { Controller } from 'react-hook-form';
 
 export const AmountFormField = ({ control, value, field, error }) => {
@@ -6,7 +7,7 @@ export const AmountFormField = ({ control, value, field, error }) => {
     <Controller
       name="amount"
       control={control}
-      type="number"
+    //   type="number"
       rules={{
         required: 'Kwota nie może być pusta',
         validate: {
