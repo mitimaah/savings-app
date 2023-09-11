@@ -1,11 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import React from 'react';
 import * as PropTypes from 'prop-types';
 
 export const ActionHeader = ({
   title,
   variant,
-  renderActions = () => null,
+  renderActions = () => <></>,
 }) => {
   return (
     <Box

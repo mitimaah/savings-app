@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { BudgetService } from 'api';
 import {
   BarElement,
@@ -33,7 +33,7 @@ export const options = {
   },
 };
 
-const HorizontalBarChart = () => {
+export const HorizontalBarChart = () => {
   const { isSuccess, data } = useQuery({
     queryKey: [BUDGET_QUERY],
     queryFn: BudgetService.findAll,
@@ -55,17 +55,21 @@ const HorizontalBarChart = () => {
 
   return (
     <Card
-      title={<Typography variant={'h4'}>{'Budżet'}</Typography>}
+      title={
+        <Typography sx={{ mb: 1 }} variant={'h4'}>
+          {'Budżet'}
+        </Typography>
+      }
       subheader={'Podsumowanie wydatków'}
     >
       {isSuccess && Object.keys(barChartData).length === 0 && (
         <Typography>'Brak wyników'</Typography>
       )}
       {isSuccess && Object.keys(barChartData).length > 0 && (
-        <Bar options={options} data={barChartData} />
+        <Box sx={{ paddingTop: '1rem' }}>
+          <Bar options={options} data={barChartData} />
+        </Box>
       )}
     </Card>
   );
 };
-
-export default HorizontalBarChart;

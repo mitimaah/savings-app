@@ -1,11 +1,23 @@
 import { request } from '../core/request';
 
+type CreateLedgerRequest = {
+  [k: string]: unknown;
+};
+
+type FindOneLedgerRequest = {
+  id: string;
+};
+
+// type RemoveLedgerRequest  = {
+//   ids: string[];
+// }
+
 export class LedgerService {
   /**
    * @returns any
    * @throws ApiError
    */
-  static create({ requestBody }) {
+  static create({ requestBody }: CreateLedgerRequest) {
     return request({
       method: 'POST',
       path: `/ledger`,
@@ -18,11 +30,11 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static findAll({ limit, offset }) {
+  static findAll(limit: number, offset: number) {
     return request({
       method: 'GET',
-      path: `/ledger?limit=${limit}&offset=${offset}`,
-      // params: { offset, limit }, i wtedy tylko path: `ledger`
+      path: `/ledger`,
+      params: { offset, limit },
     });
   }
 
@@ -41,23 +53,32 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
-  static findOne({ id }) {
-    // TODO: Implement me
+  static findOne({ id }: FindOneLedgerRequest) {
+    return request({
+      method: 'GET',
+      path: `/ledger/${id}`,
+    });
   }
 
   /**
    * @returns any
    * @throws ApiError
    */
-  static update({ id, requestBody }) {
-    // TODO: Implement me
+  static update(id: any, requestBody: any) {
+    return request({
+      method: 'PATCH',
+      path: `/ledger/${id}`,
+      body: requestBody,
+      mediaType: 'application/json',
+    });
   }
 
   /**
    * @returns any
    * @throws ApiError
    */
-  static remove({ ids }) {
+  static remove(ids: string[]) {
+    //  static remove({ ids }: RemoveLedgerRequest) {
     return ids.length === 1
       ? request({
           method: 'DELETE',

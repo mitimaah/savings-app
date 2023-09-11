@@ -1,5 +1,10 @@
-import { Box, CardActions, CardContent, CardHeader } from '@mui/material';
-import Modal from '@mui/material/Modal';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Modal as MuiModal,
+} from '@mui/material';
 import { Button } from 'ui';
 
 const styleModal = {
@@ -17,34 +22,35 @@ const styleModal = {
   flexDirection: 'column',
 };
 
-export default function BasicModal({
+export const Modal = ({
   open,
-  description,
+  title,
   children,
   disabled,
   onClose,
   onSubmit,
-}) {
+  isToSave = true,
+}) => {
   return (
-    <div>
-      <Modal open={open} onBackdropClick={onClose}>
-        <Box sx={styleModal}>
-          <CardHeader
-            id="modal-modal-title"
-            title={description}
-            component="h4"
-            sx={{ margin: 0, fontWeight: 'bold' }}
-          ></CardHeader>
-          <CardContent>{children}</CardContent>
-          <CardActions
-            sx={{
-              justifyContent: 'flex-end',
-              padding: 0,
-            }}
-          >
-            <Button color={'primary'} variant={'outlined'} onClick={onClose}>
-              Anuluj
-            </Button>
+    <MuiModal open={open} onBackdropClick={onClose}>
+      <Card sx={styleModal}>
+        <CardHeader
+          id="modal-modal-title"
+          title={title}
+          component="h4"
+          sx={{ margin: 0, fontWeight: 'bold' }}
+        ></CardHeader>
+        <CardContent>{children}</CardContent>
+        <CardActions
+          sx={{
+            justifyContent: 'flex-end',
+            padding: 0,
+          }}
+        >
+          <Button color={'primary'} variant={'outlined'} onClick={onClose}>
+            Anuluj
+          </Button>
+          {isToSave && (
             <Button
               color={'primary'}
               variant={'contained'}
@@ -53,9 +59,9 @@ export default function BasicModal({
             >
               Zapisz
             </Button>
-          </CardActions>
-        </Box>
-      </Modal>
-    </div>
+          )}
+        </CardActions>
+      </Card>
+    </MuiModal>
   );
-}
+};
