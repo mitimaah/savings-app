@@ -33,13 +33,13 @@ export const options = {
   },
 };
 
-export const HorizontalBarChart = () => {
+export const BudgetChart = () => {
   const { isSuccess, data } = useQuery({
     queryKey: [BUDGET_QUERY],
     queryFn: BudgetService.findAll,
   });
 
-  const labels = data?.map((item) => item.category.name);
+  const labels = data?.map(({category}) => category.name);
   const transformedLabels = labels?.map((label) => label + ' %');
 
   const barChartData = {
@@ -47,8 +47,8 @@ export const HorizontalBarChart = () => {
     datasets: [
       {
         label: 'spending-categories',
-        data: data?.map((item) => item.currentSpendingPercent),
-        backgroundColor: data?.map((item) => item.category.color),
+        data: data?.map(({currentSpendingPercent}) => currentSpendingPercent),
+        backgroundColor: data?.map(({category}) => category.color),
       },
     ],
   };

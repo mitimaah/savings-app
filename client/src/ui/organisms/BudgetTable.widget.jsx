@@ -36,12 +36,12 @@ export const BudgetTableWidget = () => {
 
   const deleteRecords = (ids) => mutation.mutate(ids);
 
-  const handleChangePage = (event, newPage) => {
+  const handlePageChange = (event, newPage) => {
     setPage(newPage);
     queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
@@ -103,8 +103,8 @@ export const BudgetTableWidget = () => {
       deleteRecords={deleteRecords}
       rowsPerPage={rowsPerPage}
       page={page}
-      onPageChange={handleChangePage}
-      onRowsPerPageChange={handleChangeRowsPerPage}
+      onPageChange={handlePageChange}
+      onRowsPerPageChange={handleRowsPerPageChange}
       totalRows={total}
     />
   );

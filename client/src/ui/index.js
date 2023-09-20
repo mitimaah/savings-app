@@ -17,11 +17,11 @@ export { Table } from './molecules/table/Table';
 
 // organisms
 export { AddNewBudgetRecordModal } from './organisms/AddNewBudgetRecord.modal';
-export { AddNewLedgerRecord } from './organisms/AddNewLedgerRecord.modal';
+export { AddNewLedgerRecordModal } from './organisms/AddNewLedgerRecord.modal';
 export { AppBar } from './organisms/AppBar';
 export { BudgetTableWidget } from './organisms/BudgetTable.widget';
-export { DoughnutChart } from './organisms/DoughnutChart';
-export { HorizontalBarChart } from './organisms/HorizontalBarChart';
+export { WalletChart } from './organisms/WalletChart';
+export { BudgetChart } from './organisms/BudgetChart';
 export { LedgerWidget } from './organisms/Ledger.widget';
 export { MainMenu } from './organisms/Menu';
 

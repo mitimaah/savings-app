@@ -17,13 +17,13 @@ export function EnhancedTableHead({
             onChange={onSelectAllClick}
           />
         </TableCell>
-        {headCells.map((headCell) => (
+        {headCells.map(({id, disablePadding, label}) => (
           <TableCell
-            key={headCell.id}
+            key={id}
             align={'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            padding={disablePadding ? 'none' : 'normal'}
           >
-            {headCell.label}
+            {label}
           </TableCell>
         ))}
       </TableRow>

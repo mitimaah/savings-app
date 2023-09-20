@@ -13,7 +13,7 @@ import {
 import { useState } from 'react';
 import {
   ActionHeader,
-  AddNewLedgerRecord,
+  AddNewLedgerRecordModal,
   Button,
   Card,
   CategoryCell,
@@ -24,24 +24,7 @@ import {
   NoContent,
   Table,
 } from 'ui';
-
-interface CategoryType {
-  id: string;
-  budgetId: string;
-  color: string;
-  name: string;
-  ledgerIds: string[];
-}
-
-interface RowType {
-  id: string;
-  title: string;
-  mode: string;
-  createdAt: string;
-  categoryId: string;
-  amountInCents: number;
-  category: CategoryType;
-}
+import { RowType} from 'ui/molecules/table/Table';
 
 const headCells = [
   {
@@ -96,7 +79,7 @@ export const LedgerWidget = () => {
   const [openModalType, setOpenModalType] = useState<string | null>(null);
   // const [open, setOpen] = useState(false);
   // const [transactionType, setTransactionType] = useState('');
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, error, data } = useQuery<boolean, Error, any>({
     queryKey: [LEDGER_QUERY, rowsPerPage, page],
     queryFn: () => LedgerService.findAll(rowsPerPage, page * rowsPerPage),
   });
@@ -128,7 +111,7 @@ export const LedgerWidget = () => {
     setOpenModalType(null);
   };
 
-  const handleChangePage = (
+  const handlePageChange = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
@@ -136,7 +119,7 @@ export const LedgerWidget = () => {
     queryClient.invalidateQueries({ queryKey: [LEDGER_QUERY] });
   };
 
-  const handleChangeRowsPerPage = (
+  const handleRowsPerPageChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -192,12 +175,12 @@ export const LedgerWidget = () => {
           deleteRecords={deleteRecords}
           rowsPerPage={rowsPerPage}
           page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handleRowsPerPageChange}
           totalRows={total}
         />
       )}
-      <AddNewLedgerRecord
+      <AddNewLedgerRecordModal
         onClose={handleClose}
         open={!!openModalType}
         type={openModalType}

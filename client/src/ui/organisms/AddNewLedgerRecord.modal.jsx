@@ -1,5 +1,6 @@
 import { Box, TextField } from '@mui/material';
 import { CategoryService, LedgerService } from 'api';
+import * as PropTypes from 'prop-types';
 import {
   BUDGET_QUERY,
   CATEGORIES_QUERY,
@@ -17,7 +18,7 @@ const translationKeys = {
   expense: 'wydatek',
 };
 
-export const AddNewLedgerRecord = ({ open, type, onClose }) => {
+export const AddNewLedgerRecordModal = ({ open, type, onClose }) => {
   const queryClient = useQueryClient();
   const {
     handleSubmit,
@@ -166,4 +167,10 @@ export const AddNewLedgerRecord = ({ open, type, onClose }) => {
       )}
     </Modal>
   );
+};
+
+AddNewLedgerRecordModal.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+  type: PropTypes.string,
 };

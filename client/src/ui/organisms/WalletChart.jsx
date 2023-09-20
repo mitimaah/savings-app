@@ -18,22 +18,50 @@ const options = {
   },
 };
 
-export const DoughnutChart = () => {
+export const WalletChart = () => {
   const { isSuccess, isLoading, error, data } = useQuery({
     queryKey: [SUMMARY_QUERY],
     queryFn: SummaryService.findAll,
   });
 
+  const transformedData = data?.spending;
+
   const doughnutData = {
-    labels: data?.spending.map((item) => item.categoryName),
+    labels: transformedData?.map(({categoryName}) => categoryName),
     datasets: [
       {
-        data: data?.spending.map((item) => item.amountInCents),
-        backgroundColor: data?.spending.map((item) => item.categoryColor),
+        data: transformedData?.map(({amountInCents}) => amountInCents),
+        backgroundColor: transformedData?.map(({categoryColor}) => categoryColor),
         borderWidth: 0,
       },
     ],
   };
+
+  const displayNoResult = (isSuccess, noResult) => {
+    return isSuccess && noResult && <Typography>Brak wyników</Typography>
+  }
+
+  const displayResult = (isSuccess, areResults) => {
+    return isSuccess && areResults && (<>
+      <Grid item xs={12} alignItems={'center'}>
+        <Doughnut
+          data={doughnutData}
+          height={200}
+          width={200}
+          options={options}
+        />
+      </Grid>
+      <Grid item xs={12} mt={3}>
+        {transformedData?.map(({categoryId, categoryName, categoryColor}) => (
+          <CustomChartLegendItem
+            key={categoryId}
+            name={categoryName}
+            color={categoryColor}
+          ></CustomChartLegendItem>
+        ))}
+      </Grid>
+    </>)
+  }
 
   return (
     <Card
@@ -60,30 +88,7 @@ export const DoughnutChart = () => {
       {isLoading && <Loader />}
       {!isLoading && error && <Error error={error} />}
       <Grid container mt={4}>
-        {isSuccess && Object.keys(doughnutData).length === 0 && (
-          <Typography>Brak wyników</Typography>
-        )}
-        {isSuccess && Object.keys(doughnutData).length > 0 && (
-          <>
-            <Grid item xs={12} alignItems={'center'}>
-              <Doughnut
-                data={doughnutData}
-                height={200}
-                width={200}
-                options={options}
-              />
-            </Grid>
-            <Grid item xs={12} mt={3}>
-              {data?.spending?.map((item) => (
-                <CustomChartLegendItem
-                  key={item.categoryId}
-                  name={item.categoryName}
-                  color={item.categoryColor}
-                ></CustomChartLegendItem>
-              ))}
-            </Grid>
-          </>
-        )}
+        {displayNoResult(isSuccess, Object.keys(doughnutData).length === 0) || displayResult(isSuccess, Object.keys(doughnutData).length > 0)}
       </Grid>
     </Card>
   );

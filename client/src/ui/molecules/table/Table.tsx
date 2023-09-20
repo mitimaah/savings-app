@@ -20,10 +20,10 @@ interface CategoryType {
   ledgerIds: string[];
 }
 
-interface RowType {
+export interface RowType {
   id: string;
   title: string;
-  mode: string;
+  mode: 'INCOME' | 'EXPENSE';
   createdAt: string;
   categoryId: string;
   amountInCents: number;

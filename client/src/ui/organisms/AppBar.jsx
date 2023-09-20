@@ -60,12 +60,12 @@ export const AppBar = ({ routing }) => {
               }}
             >
               {routing.map(
-                (config) =>
-                  config.linkText && (
-                    <MenuItem key={config.path} onClick={handleCloseNavMenu}>
+                ({linkText, path}) =>
+                  linkText && (
+                    <MenuItem key={path} onClick={handleCloseNavMenu}>
                       <ListItemLink
-                        to={config.path}
-                        primary={config.linkText}
+                        to={path}
+                        primary={linkText}
                       />
                     </MenuItem>
                   ),
