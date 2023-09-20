@@ -1,6 +1,14 @@
 import { Button as MuiButton } from '@mui/material';
-import PropTypes from 'prop-types';
 
+type ButtonProps = {
+  children: React.ReactNode;
+  variant?: 'contained' | 'outlined' | 'text';
+  color?: 'primary' | 'success' | 'error' | 'warning';
+  onClick?: () => void;
+  disabled?: boolean;
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+}
 export function Button({
   children,
   variant,
@@ -9,7 +17,7 @@ export function Button({
   startIcon,
   endIcon,
   onClick,
-}) {
+}: ButtonProps) {
   return (
     <MuiButton
       startIcon={startIcon}
@@ -23,14 +31,3 @@ export function Button({
     </MuiButton>
   );
 }
-
-Button.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-    .isRequired,
-  variant: PropTypes.string,
-  color: PropTypes.string,
-  disabled: PropTypes.bool,
-  startIcon: PropTypes.element,
-  endIcon: PropTypes.element,
-  onClick: PropTypes.func,
-};

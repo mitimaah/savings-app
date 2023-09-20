@@ -30,11 +30,30 @@ export class LedgerService {
    * @returns any
    * @throws ApiError
    */
+  // static findAll(limit: number, offset: number) {
+  //   return request({
+  //     method: 'GET',
+  //     path: `/ledger`,
+  //     params: { offset, limit },
+  //   });
+  // }
+
   static findAll(limit: number, offset: number) {
+    if (offset !== undefined && limit === undefined)
+      throw new Error('limit is required');
+    if (offset === undefined && limit !== undefined)
+      throw new Error('offset is required');
+
+    if (offset < 0)
+      throw new Error('offset must be greater than or equal to 0');
+    if (limit < 1) throw new Error('limit must be greater than or equal to 1');
+
+    const isPaginationEnabled = offset !== undefined && limit !== undefined;
+
     return request({
       method: 'GET',
       path: `/ledger`,
-      params: { offset, limit },
+      params: isPaginationEnabled ? { limit, offset } : {},
     });
   }
 

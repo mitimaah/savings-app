@@ -5,6 +5,7 @@ import {
   CardHeader,
   Modal as MuiModal,
 } from '@mui/material';
+import PropTypes from 'prop-types';
 import { Button } from 'ui';
 
 const styleModal = {
@@ -64,4 +65,14 @@ export const Modal = ({
       </Card>
     </MuiModal>
   );
+};
+
+Modal.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+  title: PropTypes.string,
+  children: PropTypes.node,
+  onSubmit: PropTypes.func,
+  disabled: PropTypes.bool,
+  isToSave: PropTypes.bool,
 };

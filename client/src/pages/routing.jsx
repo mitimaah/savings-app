@@ -1,10 +1,9 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
 import { Layout } from 'ui';
-import { WalletPage } from './Wallet.page';
 import { BudgetPage } from './Budget.page';
 import { NoMatchPage } from './NoMatch.page';
+import { WalletPage } from './Wallet.page';
 
 const routing = [
   {
@@ -30,12 +29,8 @@ const Routing = () => (
   <Router>
     <Layout routing={routing}>
       <Switch>
-        {routing.map((config) => (
-          <Route
-            key={config.path}
-            path={config.path}
-            component={config.component}
-          />
+        {routing.map(({ path, component }) => (
+          <Route key={path} path={path} component={component} />
         ))}
       </Switch>
     </Layout>

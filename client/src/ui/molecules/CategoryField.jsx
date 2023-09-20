@@ -1,5 +1,7 @@
 import { MenuItem, TextField } from '@mui/material';
 import { CategoryCell } from './CategoryCell';
+import * as PropTypes from 'prop-types';
+
 
 export const CategoryField = ({
   value,
@@ -22,4 +24,10 @@ export const CategoryField = ({
       ))}
     </TextField>
   );
+};
+
+CategoryField.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  categories: PropTypes.any,
 };

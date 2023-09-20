@@ -1,5 +1,6 @@
 import { Box, TextField, Typography } from '@mui/material';
 import { BudgetService, CategoryService } from 'api';
+import * as PropTypes from 'prop-types';
 import { BUDGET_QUERY, PARTIAL_CATEGORIES_QUERY } from 'queryKeys';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -137,4 +138,9 @@ export const AddNewBudgetRecordModal = ({ open, onClose }) => {
       </Modal>
     </form>
   );
+};
+
+AddNewBudgetRecordModal.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
 };

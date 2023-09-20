@@ -1,22 +1,25 @@
 import { Box, Typography } from '@mui/material';
-import * as PropTypes from 'prop-types';
+
+type ActionHeaderProps = {
+  title: React.ReactNode;
+  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  renderActions?: () => React.ReactNode;
+};
 
 export const ActionHeader = ({
   title,
-  variant,
-  renderActions = () => <></>,
-}) => {
+  variant = 'h3',
+  renderActions = () => null,
+}: ActionHeaderProps) => {
   return (
     <Box
       paddingBottom={3}
-      spacing={{
-        xs: 3,
-        md: 0,
-      }}
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'baseline',
+        xs: 3,
+        md: 0,
       }}
     >
       <Typography
@@ -30,13 +33,4 @@ export const ActionHeader = ({
       {renderActions()}
     </Box>
   );
-};
-
-ActionHeader.propTypes = {
-  title: PropTypes.any,
-  actions: PropTypes.any,
-};
-
-ActionHeader.defaultProps = {
-  variant: 'h3',
 };
