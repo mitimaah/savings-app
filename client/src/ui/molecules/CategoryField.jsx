@@ -2,7 +2,6 @@ import { MenuItem, TextField } from '@mui/material';
 import { CategoryCell } from './CategoryCell';
 import * as PropTypes from 'prop-types';
 
-
 export const CategoryField = ({
   value,
   onChange,

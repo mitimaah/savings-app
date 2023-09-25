@@ -1,11 +1,19 @@
 import { Checkbox, TableCell, TableHead, TableRow } from '@mui/material';
+import { HeadType } from '../Table';
+
+interface EnhancedTableHeadProps {
+  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  numSelected: number;
+  rowCount: number;
+  headCells: HeadType[];
+}
 
 export function EnhancedTableHead({
   onSelectAllClick,
   numSelected,
   rowCount,
   headCells,
-}) {
+}: EnhancedTableHeadProps) {
   return (
     <TableHead>
       <TableRow>
@@ -17,13 +25,13 @@ export function EnhancedTableHead({
             onChange={onSelectAllClick}
           />
         </TableCell>
-        {headCells.map(({id, disablePadding, label}) => (
+        {headCells.map((headCell: HeadType) => (
           <TableCell
-            key={id}
+            key={headCell.id}
             align={'left'}
-            padding={disablePadding ? 'none' : 'normal'}
+            padding={headCell.disablePadding ? 'none' : 'normal'}
           >
-            {label}
+            {headCell.label}
           </TableCell>
         ))}
       </TableRow>

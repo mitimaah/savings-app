@@ -12,6 +12,8 @@ import { useState } from 'react';
 import { EnhancedTableHead } from './components/EnhancedTableHead';
 import { EnhancedTableToolbar } from './components/EnhancedTableToolbar';
 
+export type LedgerModeType = 'INCOME' | 'EXPENSE';
+
 interface CategoryType {
   id: string;
   budgetId: string;
@@ -23,14 +25,15 @@ interface CategoryType {
 export interface RowType {
   id: string;
   title: string;
-  mode: 'INCOME' | 'EXPENSE';
+  mode: LedgerModeType;
   createdAt: string;
   categoryId: string;
   amountInCents: number;
   category: CategoryType;
 }
 
-interface HeadType {
+export interface HeadType {
+  disablePadding?: boolean;
   id: string;
   label: string;
   renderCell: (row: RowType) => React.ReactNode;
@@ -80,6 +83,10 @@ export const Table = ({
     deleteRecords(selected);
     setSelected([]);
   };
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -132,6 +139,15 @@ export const Table = ({
                 </TableRow>
               );
             })}
+            {emptyRows > 0 && (
+              <TableRow
+                style={{
+                  height: 52.9 * emptyRows,
+                }}
+              >
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
           </TableBody>
         </MuiTable>
       </TableContainer>
