@@ -28,7 +28,7 @@ export const MainMenu = ({ routes }) => {
       {routes
         .filter((config) => !!config.linkText)
         .sort((a, b) => a.menuOrder - b.menuOrder)
-        .map(({path, icon, linkText}) => (
+        .map(({ path, icon, linkText }) => (
           <ListItemLink
             key={path}
             to={path}

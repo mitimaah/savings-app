@@ -39,7 +39,7 @@ export const BudgetChart = () => {
     queryFn: BudgetService.findAll,
   });
 
-  const labels = data?.map(({category}) => category.name);
+  const labels = data?.map(({ category }) => category.name);
   const transformedLabels = labels?.map((label) => label + ' %');
 
   const barChartData = {
@@ -47,8 +47,8 @@ export const BudgetChart = () => {
     datasets: [
       {
         label: 'spending-categories',
-        data: data?.map(({currentSpendingPercent}) => currentSpendingPercent),
-        backgroundColor: data?.map(({category}) => category.color),
+        data: data?.map(({ currentSpendingPercent }) => currentSpendingPercent),
+        backgroundColor: data?.map(({ category }) => category.color),
       },
     ],
   };

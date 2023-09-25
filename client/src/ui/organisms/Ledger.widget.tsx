@@ -1,6 +1,6 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import { LedgerService } from 'api';
@@ -24,12 +24,13 @@ import {
   NoContent,
   Table,
 } from 'ui';
-import { RowType} from 'ui/molecules/table/Table';
+import { LedgerModeType, RowType } from 'ui/molecules/table/Table';
 
 const headCells = [
   {
     id: 'title',
     label: 'Nazwa',
+    disablePadding: false,
     renderCell: (row: RowType) => row.title,
   },
   {
@@ -42,43 +43,32 @@ const headCells = [
   {
     id: 'createdAt',
     label: 'Data',
+    disablePadding: false,
     renderCell: (row: RowType) => <LocalizedDate date={row.createdAt} />,
   },
   {
     id: 'amountInCents',
     label: 'Kwota',
-    renderCell: (row: RowType) => (
-      <Money
-        color={adjustColor(row)}
-        inCents={row.amountInCents}
-        sign={adjustSign(row)}
-      />
-    ),
+    disablePadding: false,
+    renderCell: (row: RowType) =>
+      row.mode === 'EXPENSE' ? (
+        <Typography variant="inherit" color={'error.main'}>
+          - <Money inCents={row.amountInCents} />
+        </Typography>
+      ) : (
+        <Typography variant="inherit" color={'success.main'}>
+          + <Money inCents={row.amountInCents} />
+        </Typography>
+      ),
   },
 ];
-
-const adjustColor = (row: RowType) => {
-  if (row.mode === 'INCOME') {
-    return 'green';
-  } else if (row.mode === 'EXPENSE') {
-    return 'red';
-  }
-};
-
-const adjustSign = (row: RowType) => {
-  if (row.mode === 'INCOME') {
-    return '+';
-  } else if (row.mode === 'EXPENSE') {
-    return '-';
-  }
-};
 
 export const LedgerWidget = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [openModalType, setOpenModalType] = useState<string | null>(null);
-  // const [open, setOpen] = useState(false);
-  // const [transactionType, setTransactionType] = useState('');
+  const [openModalType, setOpenModalType] = useState<'' | LedgerModeType>(
+    '',
+  );
   const { isLoading, error, data } = useQuery<boolean, Error, any>({
     queryKey: [LEDGER_QUERY, rowsPerPage, page],
     queryFn: () => LedgerService.findAll(rowsPerPage, page * rowsPerPage),
@@ -108,7 +98,7 @@ export const LedgerWidget = () => {
   };
 
   const handleClose = () => {
-    setOpenModalType(null);
+    setOpenModalType('');
   };
 
   const handlePageChange = (
