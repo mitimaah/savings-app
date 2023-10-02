@@ -3,6 +3,8 @@ import FormData from 'form-data';
 
 import { ApiError } from './ApiError';
 
+const { REACT_APP_API_URL } = process.env;
+
 function isDefined(value) {
   return value !== undefined && value !== null;
 }
@@ -40,7 +42,7 @@ function getQueryString(params) {
 
 function getUrl(options) {
   const path = options.path;
-  const url = `http://localhost:4320${path}`;
+  const url = `${REACT_APP_API_URL}${path}`;
   if (options.query) {
     return `${url}${getQueryString(options.query)}`;
   }
