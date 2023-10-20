@@ -2,7 +2,7 @@
 
 The project was created as a part of the React Challenge v2 conducted by Dare IT - an organization supporting women to start career in the IT industry :cherry_blossom:
 
-Saving App is an application enabling to control household budget by adding everyday incomes and spendings. The balance between these two is visualized on a chart.
+Savings App is an application enabling to control household budget by adding everyday incomes and spendings. The balance between these two is visualized on a chart.
 
 The goal of the challenge was to create a React app using some popular libraries, workshops, design and testing tools and communicate with the server using REST API.
 
@@ -73,8 +73,6 @@ To run the tests, start the client and the server as before, run the command fro
         npm run cypress:open
 
 This command will launch the Cypress panel where you can run all or selected tests.
-
-# FAQ
 
 ## How to add new npm package?
 
