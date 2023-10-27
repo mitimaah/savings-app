@@ -1,38 +1,36 @@
-import { Box, MenuItem, TextField } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
 import { BudgetService, CategoryService } from 'api';
-import { BUDGET_QUERY, CATEGORIES_QUERY } from 'queryKeys';
+import * as PropTypes from 'prop-types';
+import { BUDGET_QUERY, PARTIAL_CATEGORIES_QUERY } from 'queryKeys';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { CategoryCell } from 'ui';
-import BasicModal from 'ui/molecules/Modal';
+import { Error, Loader, Modal } from 'ui';
+import { CategoryField } from 'ui/molecules/CategoryField';
+import { formatDollarsToCents } from 'utils';
 
-const defaultValues = {
-  amount: '',
-  category: '',
-};
+export const AddNewBudgetRecordModal = ({ open, onClose }) => {
+  const queryClient = useQueryClient();
 
-const AddNewBudgetRecord = ({ open, onClose }) => {
   const {
     handleSubmit,
     control,
     reset,
     formState: { isValid },
   } = useForm({
-    defaultValues: defaultValues,
+    mode: 'onChange',
   });
 
-  const { data } = useQuery({
-    queryKey: [CATEGORIES_QUERY],
-    queryFn: () => CategoryService.findAll(true),
-  });
-
-  const queryClient = useQueryClient();
+  const {
+    isLoading,
+    error,
+    data: categories,
+  } = useQuery(PARTIAL_CATEGORIES_QUERY, () => CategoryService.findAll(true));
 
   const mutation = useMutation({
     mutationFn: BudgetService.create,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
-      queryClient.invalidateQueries({ queryKey: [CATEGORIES_QUERY] });
+      queryClient.refetchQueries({ queryKey: [BUDGET_QUERY] });
+      queryClient.refetchQueries({ queryKey: [PARTIAL_CATEGORIES_QUERY] });
     },
   });
 
@@ -42,88 +40,107 @@ const AddNewBudgetRecord = ({ open, onClose }) => {
 
   const onSubmit = (record) => {
     createRecord({
-      amountInCents: record.amount * 100,
-      categoryId: record.category,
+      amountInCents: formatDollarsToCents(record.amount),
+      categoryId: record.categoryId,
     });
     onClose();
     reset();
   };
 
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
+
   return (
     <form>
-      <BasicModal
+      <Modal
         open={open}
-        onClose={onClose}
+        onClose={handleClose}
         onSubmit={handleSubmit(onSubmit)}
-        description={'Zdefiniuj budżet'}
+        title={'Zdefiniuj budżet'}
         disabled={!isValid}
+        isToSave={!!categories?.length}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '2rem',
-            padding: '2rem 0',
-          }}
-        >
-          <Controller
-            name="amount"
-            control={control}
-            rules={{
-              required: 'Kwota nie może być pusta',
-              validate: (value) => {
-                if (value <= 0) {
-                  return 'Kwota musi być większa niż 0';
-                } else if (value > 1000000)
-                  return 'Kwota nie może być większa niż 1000000';
-              },
+        {isLoading && <Loader />}
+        {error && <Error error={error} />}
+        {!isLoading && !error && !categories?.length ? (
+          <Typography sx={{ mt: '1rem' }}>
+            Wszystkie kategorie są przypisane do budżetu. Aby zredefiniować usuń
+            jeden z wpisów.
+          </Typography>
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '2rem',
+              padding: '2rem 0',
             }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextField
-                InputLabelProps={{
-                  style: { color: '#1F2633' },
-                  // shrink: false,
-                }}
-                label="Kwota"
-                variant="outlined"
-                type="number"
-                value={value}
-                onChange={onChange}
-                error={!!error}
-                helperText={error ? error.message : null}
-              />
-            )}
-          />
-          <Controller
+          >
+            <Controller
+              name="amount"
+              control={control}
+              // defaultValue=""
+              rules={{
+                required: 'Kwota nie może być pusta',
+                validate: (value) => {
+                  if (value <= 0) {
+                    return 'Kwota musi być większa niż 0';
+                  } else if (value > 1000000)
+                    return 'Kwota nie może być większa niż 1000000';
+                },
+              }}
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  label="Kwota"
+                  variant="outlined"
+                  type="number"
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+            />
+            {/* <AmountFormField
             control={control}
-            name="category"
-            rules={{
-              required: 'Wybierz kategorię',
-            }}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextField
-                InputLabelProps={{
-                  style: { color: '#80848D' },
-                }}
-                select
-                value={value}
-                onChange={onChange}
-                label="Wybierz kategorię"
-                error={!!error}
-                helperText={error && isValid ? error.message : null}
-              >
-                {data.map(({ color, name, id }) => (
-                  <MenuItem key={id} value={id}>
-                    <CategoryCell color={color} name={name} />
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-          />
-        </Box>
-      </BasicModal>
+            value={value}
+            field={field}
+            error={error}
+          /> */}
+
+            <Controller
+              control={control}
+              defaultValue=""
+              name="categoryId"
+              rules={{
+                required: { value: true, message: 'Wybierz kategorię' },
+              }}
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <CategoryField
+                  categories={categories}
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+            />
+          </Box>
+        )}
+      </Modal>
     </form>
   );
 };
 
-export default AddNewBudgetRecord;
+AddNewBudgetRecordModal.propTypes = {
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+};

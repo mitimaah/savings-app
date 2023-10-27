@@ -1,5 +1,6 @@
 import { BudgetService } from 'api';
-import { BUDGET_QUERY, CATEGORIES_QUERY } from 'queryKeys';
+import { BUDGET_QUERY, PARTIAL_CATEGORIES_QUERY } from 'queryKeys';
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import {
@@ -13,11 +14,15 @@ import {
 } from 'ui';
 
 export const BudgetTableWidget = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const queryClient = useQueryClient();
   const { isLoading, error, data } = useQuery({
     queryKey: [BUDGET_QUERY],
     queryFn: BudgetService.findAll,
   });
+
+  const total = data?.length;
 
   const mutation = useMutation({
     mutationFn: (selected) => {
@@ -25,49 +30,54 @@ export const BudgetTableWidget = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
-      queryClient.invalidateQueries({ queryKey: [CATEGORIES_QUERY] });
+      queryClient.invalidateQueries({ queryKey: [PARTIAL_CATEGORIES_QUERY] });
     },
   });
 
   const deleteRecords = (ids) => mutation.mutate(ids);
 
-  const getUniqueId = (row) => {
-    return row.id;
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+    queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
   };
 
-  const headCells = [
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+    queryClient.invalidateQueries({ queryKey: [BUDGET_QUERY] });
+  };
+
+  const tableDefinition = [
     {
-      id: '1',
+      id: 'name',
       label: 'Nazwa',
       renderCell: (row) => (
         <CategoryCell color={row.category.color} name={row.category.name} />
       ),
     },
     {
-      id: '2',
+      id: 'amount',
       label: 'Planowane wydatki',
       renderCell: (row) => <Money inCents={row.amountInCents} />,
     },
     {
-      id: '3',
+      id: 'current-amount',
       label: 'Obecna kwota',
       renderCell: (row) => <Money inCents={row.currentSpending} />,
     },
     {
-      id: '4',
+      id: 'status',
       label: 'Status',
       renderCell: (row) => {
-        if (row.currentSpending === row.amountInCents) {
-          return 'Wykorzystany';
-        } else if (row.currentSpending > row.amountInCents) {
-          return 'Przekroczone';
-        } else if (row.currentSpending < row.amountInCents) {
-          return 'W normie';
-        }
+        return row.currentSpending === row.amountInCents
+          ? 'Wykorzystany'
+          : row.currentSpending > row.amountInCents
+          ? 'Przekroczone'
+          : 'W normie';
       },
     },
     {
-      id: '5',
+      id: 'createdAt',
       label: 'Data utworzenia',
       renderCell: (row) => <LocalizedDate date={row.createdAt} />,
     },
@@ -87,10 +97,15 @@ export const BudgetTableWidget = () => {
 
   return (
     <Table
-      headCells={headCells}
+      headCells={tableDefinition}
       rows={data}
-      getUniqueId={getUniqueId}
+      getUniqueId={(row) => row.id}
       deleteRecords={deleteRecords}
+      rowsPerPage={rowsPerPage}
+      page={page}
+      onPageChange={handlePageChange}
+      onRowsPerPageChange={handleRowsPerPageChange}
+      totalRows={total}
     />
   );
 };

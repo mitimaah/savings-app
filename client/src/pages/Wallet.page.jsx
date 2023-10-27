@@ -1,7 +1,5 @@
 import { Grid } from '@mui/material';
-import { LedgerWidget, Page } from 'ui';
-import DoughnutChart from 'ui/organisms/DoughnutChart';
-import HorizontalBarChart from 'ui/organisms/HorizontalBarChart';
+import { BudgetChart, LedgerWidget, Page, WalletChart } from 'ui';
 
 export const WalletPage = () => (
   <Page title={'Portfel'}>
@@ -9,12 +7,31 @@ export const WalletPage = () => (
       <Grid item xs={12} md={8}>
         <LedgerWidget />
       </Grid>
-      <Grid container item xs={12} md={4} spacing={3}>
-        <Grid item xs={12} data-test-id={'wallet-top-sidebar'}>
-          <DoughnutChart />
+      <Grid
+        container
+        item
+        xs={12}
+        md={4}
+        spacing={3}
+        style={{ display: 'block', paddingLeft: '24px' }}
+      >
+        <Grid
+          item
+          xs={12}
+          data-test-id={'wallet-top-sidebar'}
+          // className={'wallet-sidebar'}
+          sx={{ height: 'fit-content' }}
+        >
+          <WalletChart />
         </Grid>
-        <Grid item xs={12} data-test-id={'wallet-bottom-sidebar'}>
-          <HorizontalBarChart />
+        <Grid
+          item
+          xs={12}
+          data-test-id={'wallet-bottom-sidebar'}
+          // className={'wallet-sidebar'}
+          sx={{ height: 'fit-content' }}
+        >
+          <BudgetChart />
         </Grid>
       </Grid>
     </Grid>

@@ -1,14 +1,16 @@
-import * as React from 'react';
-import MuiAppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Menu from '@mui/material/Menu';
-import Container from '@mui/material/Container';
-import MenuItem from '@mui/material/MenuItem';
-import { MainMenu, ListItemLink } from 'ui';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import {
+  Box,
+  Container,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+} from '@mui/material';
+import MuiAppBar from '@mui/material/AppBar';
 import DareItLogo from 'assets/dare_it_portfolio_challenge.svg';
+import * as React from 'react';
+import { ListItemLink, MainMenu } from 'ui';
 
 export const AppBar = ({ routing }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -58,13 +60,10 @@ export const AppBar = ({ routing }) => {
               }}
             >
               {routing.map(
-                (config) =>
-                  config.linkText && (
-                    <MenuItem key={config.path} onClick={handleCloseNavMenu}>
-                      <ListItemLink
-                        to={config.path}
-                        primary={config.linkText}
-                      />
+                ({ linkText, path }) =>
+                  linkText && (
+                    <MenuItem key={path} onClick={handleCloseNavMenu}>
+                      <ListItemLink to={path} primary={linkText} />
                     </MenuItem>
                   ),
               )}

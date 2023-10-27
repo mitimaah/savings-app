@@ -48,11 +48,11 @@ export class SummaryController {
       .sort((a, b) => Number(b.createdAt) - Number(a.createdAt));
 
     const transformed = categories
-      .map((category) => ({
-        categoryName: category.name,
-        categoryId: category.id,
-        categoryColor: category.color,
-        amountInCents: this.getLedgersCategoryId(category.id).reduce(
+      .map(({ name, id, color }) => ({
+        categoryName: name,
+        categoryId: id,
+        categoryColor: color,
+        amountInCents: this.getLedgersCategoryId(id).reduce(
           (acc, curr) => acc + curr.amountInCents,
           0,
         ),

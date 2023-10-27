@@ -28,12 +28,12 @@ export const MainMenu = ({ routes }) => {
       {routes
         .filter((config) => !!config.linkText)
         .sort((a, b) => a.menuOrder - b.menuOrder)
-        .map((config) => (
+        .map(({ path, icon, linkText }) => (
           <ListItemLink
-            key={config.path}
-            to={config.path}
-            icon={config.icon}
-            primary={config.linkText}
+            key={path}
+            to={path}
+            icon={icon}
+            primary={linkText}
             onClick={handleListItemClick}
             selectedPathname={selectedPathname}
           />

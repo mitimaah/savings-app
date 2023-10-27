@@ -2,7 +2,7 @@ export const getBrowserLocales = (
   options = {
     languageCodeOnly: false,
   },
-) => {
+): string[] | undefined => {
   const browserLocales =
     navigator.languages === undefined
       ? [navigator.language]

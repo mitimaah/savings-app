@@ -1,7 +1,12 @@
 import { Box, Typography } from '@mui/material';
 import ErrorImage from 'assets/unknown_error.png';
 
-export const Error = ({ error }) => {
+type ErrorProps = {
+  error: Error;
+};
+
+export const Error = ({ error }: ErrorProps) => {
+
   return (
     <Box
       sx={{
@@ -26,7 +31,7 @@ export const Error = ({ error }) => {
             src={ErrorImage}
             style={{
               height: '100%',
-              weight: '100%',
+              width: '100%',
               maxHeight: '248px',
               maxWidth: '248px',
             }}

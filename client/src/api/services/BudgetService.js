@@ -1,6 +1,25 @@
 import { request } from '../core/request';
 
 export class BudgetService {
+  static mapApiBudgetToBudget(apiBudget) {
+    return {
+      id: apiBudget.id,
+      categoryId: apiBudget.categoryId,
+      createdAt: apiBudget.createdAt,
+      currentSpending: apiBudget.currentSpending,
+      currentSpendingPercent: apiBudget.currentSpendingPercent,
+      amountInCents: apiBudget.amountInCents,
+      category: {
+        id: apiBudget.category?.id,
+        name: apiBudget.category?.name,
+        createdAt: apiBudget.category?.createdAt,
+        budgetId: apiBudget.category?.budgetId,
+        ledgerIds: apiBudget.category?.ledgerIds,
+        color: apiBudget.category?.color,
+      },
+    };
+  }
+
   /**
    * @returns any
    * @throws ApiError
@@ -15,13 +34,15 @@ export class BudgetService {
   }
 
   /**
-   * @returns any
+   * @returns Array<any>
    * @throws ApiError
    */
   static findAll() {
     return request({
       method: 'GET',
       path: `/budget`,
+    }).then((response) => {
+      return (response ?? []).map(BudgetService.mapApiBudgetToBudget);
     });
   }
 
@@ -33,11 +54,11 @@ export class BudgetService {
     return request({
       method: 'GET',
       path: `/budget/${id}`,
-    });
+    }).then((response) => BudgetService.mapApiBudgetToBudget(response));
   }
 
   /**
-   * @returns any
+   * @returns Promise<void>
    * @throws ApiError
    */
   static update({ id, requestBody }) {
@@ -50,7 +71,7 @@ export class BudgetService {
   }
 
   /**
-   * @returns any
+   * @returns Promise<void>
    * @throws ApiError
    */
   static remove({ ids }) {
