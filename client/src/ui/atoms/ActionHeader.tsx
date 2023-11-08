@@ -1,12 +1,13 @@
 import { Box, Typography } from '@mui/material';
+import { FC } from 'react';
 
 type ActionHeaderProps = {
   title: React.ReactNode;
-  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  variant?: keyof Pick<HTMLElementTagNameMap, 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'>;
   renderActions?: () => React.ReactNode;
 };
 
-export const ActionHeader = ({
+export const ActionHeader: FC<ActionHeaderProps> = ({
   title,
   variant = 'h3',
   renderActions = () => null,

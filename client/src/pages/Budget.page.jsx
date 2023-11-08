@@ -1,6 +1,6 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Grid } from '@mui/material';
-import { useState } from 'react';
+import { useModal } from 'hooks/useModal';
 
 import {
   ActionHeader,
@@ -12,19 +12,7 @@ import {
 } from 'ui';
 
 export const BudgetPage = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const handleOpen = () => {
-    setModalVisible(true);
-  };
-
-  const handleClose = () => {
-    setModalVisible(false);
-  };
-
-  const handleSubmit = () => {
-    setModalVisible(false);
-  };
+  const { modalVisible, handleOpen, handleClose, handleSubmit } = useModal();
 
   return (
     <Page title="Budżet">
