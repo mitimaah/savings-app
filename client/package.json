@@ -53,8 +53,6 @@
     "eject": "react-scripts eject",
     "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
     "lint:check": "eslint \"src/**/*.{js,jsx}\"",
-    "format:fix": "prettier --write \"src/**/*.{js,jsx}\"",
-    "format:check": "prettier --check \"src/**/*.{js,jsx}\"",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
